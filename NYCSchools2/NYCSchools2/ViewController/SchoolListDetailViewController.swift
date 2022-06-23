@@ -86,7 +86,7 @@ class SchoolListDetailViewController: UIViewController {
 
     func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D?{
         if let schoolAddress = location{
-            let coordinateString = schoolAddress.slice(from: "(", to: ")")
+            let coordinateString = schoolAddress.slice(start: "(", end: ")")
             let coordinates = coordinateString?.components(separatedBy: ",")
             if let coordinateArray = coordinates{
                 let latitude = (coordinateArray[0] as NSString).doubleValue

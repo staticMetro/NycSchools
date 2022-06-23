@@ -12,57 +12,57 @@ class SchoolListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     var alertController: UIAlertController?
+    // @IBOutlet weak var searchBar: UISearchBar!
     var isAnimating = false
-    var viewModel: SchoolListViewModel?
+    var schoolListViewModel: SchoolListViewModel?
 
-    /**SEARCH BAR CODE
-     var searchController = UISearchController(searchResultsController: nil)
-     var filteredSchools: [SchoolModel] = []
-     var isSearchBarEmpty: Bool {
-       return searchController.searchBar.text?.isEmpty ?? true
-     }
-     var searchFooterBottomConstraint: NSLayoutConstraint!
-     */
-
+    // /**SEARCH BAR CODE
+    var searchController = UISearchController(searchResultsController: nil)
+    var filteredSchools: [SchoolModel] = []
+    var searchFooterBottomConstraint: NSLayoutConstraint!
+    // */
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = SchoolListViewModel(self)
+        schoolListViewModel = SchoolListViewModel(self)
         self.title = "NYC Schools"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.startAnimation()
-        
-        /**SEARCH BAR CODE
-
+        filteredSchools = schoolListViewModel!.schools
+        searchBarSetup()
+    }
+    func searchBarSetup() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search NYC High Schools"
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-         */
     }
-
-    func startAnimation(){
-        if (self.isAnimating == false){
+    func startAnimation() {
+        if self.isAnimating == false {
             self.isAnimating = true
-            self.alertController = UIAlertController(title: "NYC Schools", message:"Fetching data", preferredStyle: .alert)
+            self.alertController = UIAlertController(title: "NYC Schools",
+                                                     message: "Fetching data", preferredStyle: .alert)
             self.present(self.alertController!, animated: true, completion: nil)
         }
     }
 
-    func stopAnimation(){
+    func stopAnimation() {
         self.alertController?.dismiss(animated: true, completion: nil)
         self.alertController = nil
         self.isAnimating = false
     }
 
-    //Function to throw alert.
+    // Function to throw alert.
     func displayAlert(_ error: Error) {
         self.dismiss(animated: false) {
             print("Error while fetching Schools.")
             print(error.localizedDescription)
-            let alert = UIAlertController(title: "Error while fetching details.", message: "\(error.localizedDescription)", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+            let alert = UIAlertController(title: "Error while fetching details.",
+                                          message: "\(error.localizedDescription)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"),
+                                          style: .`default`, handler: { _ in
                 print("Error while fetching details.")
             }))
             self.present(alert, animated: true, completion: nil)
@@ -79,21 +79,43 @@ class SchoolListViewController: UIViewController {
         }
     }
 
+    // Navigate to the school address, by clicking "Navigate" button.
     /*
-     //Navigate to the school address, by clicking "Navigate" button.
      func navigateToAddress(_ sender: UIButton){
+
+
+
 
      }
      */
-    func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D?{
-        if let schoolAddress = location{
-            let coordinateString = schoolAddress.slice(from: "(", to: ")")
-            let coordinates = coordinateString?.components(separatedBy: ",")
-            if let coordinateArray = coordinates{
-                let latitude = (coordinateArray[0] as NSString).doubleValue
-                let longitude = (coordinateArray[1] as NSString).doubleValue
-                return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
-            }
+    func fetchCoordinates(_ schoolLocation: String?) -> CLLocationCoordinate2D? {
+        /**
+         if let schoolAddress = schoolLocation{
+             let coordinateString = schoolAddress.slice(start: "(", end: ")")
+             let coordinates = coordinateString?.components(separatedBy: ",")
+             if let coordinateArray = coordinates{
+                 let latitude = (coordinateArray[0] as NSString).doubleValue
+                 let longitude = (coordinateArray[1] as NSString).doubleValue
+                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+             }
+         }
+
+         guard schoolLocation != nil else {
+             let schoolAddress = schoolLocation
+             let coordinateArray = schoolAddress!.slice(start: "(", end: ")")?.components(separatedBy: ",")
+             let schoolLatitude = (coordinateArray![0] as NSString).doubleValue
+             let schoolLongitude = (coordinateArray![1] as NSString).doubleValue
+             return CLLocationCoordinate2D(latitude: CLLocationDegrees(schoolLatitude),
+                                           longitude: CLLocationDegrees(schoolLongitude))
+         }
+         */
+        guard schoolLocation != nil else {
+            let schoolAddress = schoolLocation
+            let coordinateArray = schoolAddress!.slice(start: "(", end: ")")?.components(separatedBy: ",")
+            let schoolLatitude = (coordinateArray![0] as NSString).doubleValue
+            let schoolLongitude = (coordinateArray![1] as NSString).doubleValue
+            return CLLocationCoordinate2D(latitude: CLLocationDegrees(schoolLatitude),
+                                          longitude: CLLocationDegrees(schoolLongitude))
         }
         return nil
     }
@@ -101,80 +123,78 @@ class SchoolListViewController: UIViewController {
 
 extension SchoolListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.numberOfRows(inSection: section) ?? 0
+        if isFiltering() {
+          return filteredSchools.count
+        }
+        return schoolListViewModel?.numberOfRows(inSection: section) ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // swiftlint:disable force_cast
         let cell = tableView.dequeueReusableCell(withIdentifier: SchoolTableViewCell.identifier) as! SchoolTableViewCell
-        cell.school = viewModel!.data(forRowAt: indexPath)
-
-        //Add button action
-        cell.navigateButton.tag = indexPath.row
+        // swiftlint:enable force_cast
+        if isFiltering() {
+            cell.school = filteredSchools[indexPath.row]
+        } else {
+            cell.school = schoolListViewModel!.data(forRowAt: indexPath)
+        }
         return cell
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 32
+    }
+
 }
 
 extension SchoolListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let school = viewModel!.data(forRowAt: indexPath)
+        let school = schoolListViewModel!.data(forRowAt: indexPath)
         self.performSegue(withIdentifier: "mainToDetailSegue", sender: school)
     }
 }
 
 extension SchoolListViewController: SchoolListViewControllerDelegate {
     func fetchSchoolListSuccess(_ failedError: Error?) {
-        if let error = failedError {
-            self.displayAlert(error)
-        }else{
+        if let error = failedError {self.displayAlert(error)} else {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.stopAnimation()
             }
         }
     }
-    func fetchSATSuccess(_ failedError: Error?){
-        if let error = failedError {
-            self.displayAlert(error)
-        }
+    func fetchSATSuccess(_ failedError: Error?) {
+        if let error = failedError {self.displayAlert(error)}
     }
-
 }
-/**SEARCH BAR CODE
+//  /**SEARCH BAR CODE
 extension SchoolListViewController: UISearchResultsUpdating {
-    func filterContentForSearchText(_ searchText: String){
-        //filteredSchools = (viewModel?.schools.filter(<#T##isIncluded: (SchoolModel) throws -> Bool##(SchoolModel) throws -> Bool#>))!
-        //return school.school_name?.contains(searchText)
-        tableView.reloadData()
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
     }
- func updateSearchResults(for searchController: UISearchController) {
-     let searchBar = searchController.searchBar
-     filterContentForSearchText(searchBar.text!)
- }
- func handleKeyboard(notification: Notification) {
-     guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {
-       searchFooterBottomConstraint.constant = 0
-       view.layoutIfNeeded()
-       return
-     }
-
-     guard let info = notification.userInfo,
-           let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-
-     let keyboardHeight = keyboardFrame.cgRectValue.size.height
-     UIView.animate(withDuration: 0.1) {
-       self.searchFooterBottomConstraint.constant = keyboardHeight
-       self.view.layoutIfNeeded()
-     }
-   }
- */
-
-
-extension String {
-    func slice(from: String, to: String) -> String? {
-        return (range(of: from)?.upperBound).flatMap { substringFrom in
-            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-                String(self[substringFrom..<substringTo])
-            }
+    func handleKeyboard(notification: Notification) {
+        guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {
+            searchFooterBottomConstraint.constant = 0
+            view.layoutIfNeeded()
+            return
         }
+
+        guard let info = notification.userInfo,
+                let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardHeight = keyboardFrame.cgRectValue.size.height
+        UIView.animate(withDuration: 0.1) {
+            self.searchFooterBottomConstraint.constant = keyboardHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+    func isFiltering() -> Bool {return searchController.isActive && !searchBarIsEmpty()}
+    func searchBarIsEmpty() -> Bool {return searchController.searchBar.text?.isEmpty ?? true}
+
+    func filterContentForSearchText(_ searchText: String) {
+        filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
+            return school.school_name!.lowercased().contains(searchText.lowercased())
+        }))!
+        tableView.reloadData()
     }
 }
