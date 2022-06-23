@@ -18,9 +18,9 @@ class SchoolTableViewCell: UITableViewCell {
     var school: SchoolModel! {
         didSet {
             schoolNameLabel.text = school.school_name
-            //if let city = school.city, let code = school.state_code, let zip = school.zip{
+            // if let city = school.city, let code = school.state_code, let zip = school.zip{
                // cityLabel.text = "\(city), \(code), \(zip)"
-            //}
+            // }
         }
     }
 }
