@@ -10,24 +10,25 @@ import UIKit
 import MapKit
 
 class SchoolListDetailViewController: UIViewController {
+    @IBOutlet weak private var schoolNameLabel: UILabel!
+    @IBOutlet weak private var readingSATScoreLabel: UILabel!
+    @IBOutlet weak private var mathSATScoreLabel: UILabel!
+    @IBOutlet weak private var writingLabel: UILabel!
+    @IBOutlet weak private var addressLineLabel: UILabel!
+    @IBOutlet weak private var cityLabel: UILabel!
+    @IBOutlet weak private var websiteLabel: UILabel!
+    @IBOutlet weak private var phoneNumberLabel: UILabel!
+    @IBOutlet weak private var emailLabel: UILabel!
+    @IBOutlet weak private var faxNumberLabel: UILabel!
+    @IBOutlet weak private var mapView: MKMapView!
 
-    @IBOutlet weak var schoolNameLabel: UILabel!
-    @IBOutlet weak var readingSATScoreLabel: UILabel!
-    @IBOutlet weak var mathSATScoreLabel: UILabel!
-    @IBOutlet weak var writingLabel: UILabel!
-    @IBOutlet weak var addressLineLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var websiteLabel: UILabel!
-    @IBOutlet weak var phoneNumberLabel: UILabel!
-    @IBOutlet weak var emailLabel: UILabel!
-    @IBOutlet weak var faxNumberLabel: UILabel!
-    @IBOutlet weak var mapView: MKMapView!
-   // @IBOutlet weak var navigateButton: UIButton?
+    var schoolListDetailViewModel = SchoolListDetailViewModel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
-
+}
+extension SchoolListDetailViewController: SchoolListDetailViewModelDelegateProtocol {
     func loadDetailView(_ school: SchoolModel) {
         schoolNameLabel.text = school.schoolName
         if let readingScore = school.satScores?.satReadingScore {
@@ -47,30 +48,6 @@ class SchoolListDetailViewController: UIViewController {
         phoneNumberLabel.text = "Phone Number: " + (school.phoneNumber)!
         emailLabel.text = school.schoolEmail
         faxNumberLabel.text = school.faxNumber
-        Utilities.setLocation(school.location!, mapView)
-    }
-    func setLocation(_ location: String) {
-        let schoolAnnotation = MKPointAnnotation()
-        if let schoolCoordinate = fetchCoordinates(location) {
-            schoolAnnotation.coordinate = schoolCoordinate
-            mapView.addAnnotation(schoolAnnotation)
-            let span = MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
-            let region = MKCoordinateRegion(center: schoolAnnotation.coordinate, span: span)
-            let adjustRegion = mapView.regionThatFits(region)
-            mapView.setRegion(adjustRegion, animated: true)
-        }
-    }
-    func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D? {
-        if let schoolAddress = location {
-            let coordinateString = schoolAddress.slice(start: "(", end: ")")
-            let coordinates = coordinateString?.components(separatedBy: ",")
-            if let coordinateArray = coordinates {
-                let latitude = (coordinateArray[0] as NSString).doubleValue
-                let longitude = (coordinateArray[1] as NSString).doubleValue
-                return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
-                                              longitude: CLLocationDegrees(longitude))
-            }
-        }
-        return nil
+        Utilities.setLocation(school.location, mapView)
     }
 }

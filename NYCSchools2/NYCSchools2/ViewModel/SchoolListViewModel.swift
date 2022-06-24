@@ -7,18 +7,19 @@
 
 import Foundation
 
-protocol SchoolListViewControllerDelegate: AnyObject {
+protocol SchoolListViewModelDelegateProtocol: AnyObject {
     func fetchSchoolListSuccess(_ failedError: Error?)
     func fetchSATSuccess(_ failedError: Error?)
 }
 
 class SchoolListViewModel {
     internal var schools: [SchoolModel] = []
+    internal var filteredSchools: [SchoolModel] = []
     internal var satResults: [SATScoreModel] = []
     private var schoolsDataManager = SchoolsDataManager()
-    private weak var schoolsListViewControllerDelegate: SchoolListViewControllerDelegate?
+    private weak var schoolsListViewControllerDelegate: SchoolListViewModelDelegateProtocol?
 
-    init(_ schoolsListViewControllerDelegate: SchoolListViewControllerDelegate) {
+    init(_ schoolsListViewControllerDelegate: SchoolListViewModelDelegateProtocol) {
         self.schoolsListViewControllerDelegate = schoolsListViewControllerDelegate
         fetchSchools()
     }

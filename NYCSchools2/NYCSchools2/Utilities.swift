@@ -24,7 +24,7 @@ class Utilities {
 
     static func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D? {
         /*
-         if let schoolAddress = schoolLocation{
+         if let schoolAddress = location{
              let coordinateString = schoolAddress.slice(start: "(", end: ")")
              let coordinates = coordinateString?.components(separatedBy: ",")
              if let coordinateArray = coordinates{
@@ -34,26 +34,16 @@ class Utilities {
                                         longitude: CLLocationDegrees(longitude))
              }
          }
-
-         guard schoolLocation != nil else {
-             let schoolAddress = schoolLocation
-             let coordinateArray = schoolAddress!.slice(start: "(", end: ")")?.components(separatedBy: ",")
-             let schoolLatitude = (coordinateArray![0] as NSString).doubleValue
-             let schoolLongitude = (coordinateArray![1] as NSString).doubleValue
-             return CLLocationCoordinate2D(latitude: CLLocationDegrees(schoolLatitude),
-                                           longitude: CLLocationDegrees(schoolLongitude))
-         }
          */
-        if let schoolAddress = location {
-            let coordinateString = schoolAddress.slice(start: "(", end: ")")
-            let coordinates = coordinateString?.components(separatedBy: ",")
-            if let coordinateArray = coordinates {
-                let latitude = (coordinateArray[0] as NSString).doubleValue
-                let longitude = (coordinateArray[1] as NSString).doubleValue
-                return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
-                                              longitude: CLLocationDegrees(longitude))
-            }
+        guard let schoolAddress = location,
+              let coordinateString = schoolAddress.slice(start: "(", end: ")") else {
+            return CLLocationCoordinate2D(latitude: CLLocationDegrees(0),
+                                          longitude: CLLocationDegrees(0))
         }
-        return nil
+        let coordinateArray = (coordinateString.components(separatedBy: ","))
+        let latitude = (coordinateArray[0] as NSString).doubleValue
+        let longitude = (coordinateArray[1] as NSString).doubleValue
+        return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
+                                      longitude: CLLocationDegrees(longitude))
     }
 }
