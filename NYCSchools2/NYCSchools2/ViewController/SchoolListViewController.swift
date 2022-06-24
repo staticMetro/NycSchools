@@ -12,9 +12,6 @@ class SchoolListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    var alertController: UIAlertController?
-    // @IBOutlet weak var searchBar: UISearchBar!
-    var isAnimating = false
     var schoolListViewModel: SchoolListViewModel?
     var searchController = UISearchController(searchResultsController: nil)
     var filteredSchools: [SchoolModel] = []
@@ -26,6 +23,7 @@ class SchoolListViewController: UIViewController {
         self.title = "NYC Schools"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         activityIndicator.startAnimating()
+        searchBarSetup()
     }
     func searchBarSetup() {
         searchController.searchResultsUpdater = self
@@ -34,20 +32,6 @@ class SchoolListViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-    }
-    func startAnimation() {
-        if self.isAnimating == false {
-            self.isAnimating = true
-            self.alertController = UIAlertController(title: "NYC Schools",
-                                                     message: "Fetching data", preferredStyle: .alert)
-            self.present(self.alertController!, animated: true, completion: nil)
-        }
-    }
-
-    func stopAnimation() {
-        self.alertController?.dismiss(animated: true, completion: nil)
-        self.alertController = nil
-        self.isAnimating = false
     }
 
     // Function to throw alert.
@@ -74,16 +58,6 @@ class SchoolListViewController: UIViewController {
             detailsView?.loadDetailView(school)
         }
     }
-
-    // Navigate to the school address, by clicking "Navigate" button.
-    /*
-     func navigateToAddress(_ sender: UIButton){
-
-
-
-
-     }
-     */
     func fetchCoordinates(_ schoolLocation: String?) -> CLLocationCoordinate2D? {
         /*
 
@@ -93,12 +67,8 @@ class SchoolListViewController: UIViewController {
              if let coordinateArray = coordinates{
                  let latitude = (coordinateArray[0] as NSString).doubleValue
                  let longitude = (coordinateArray[1] as NSString).doubleValue
-<<<<<<< HEAD
                  return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
                                         longitude: CLLocationDegrees(longitude))
-=======
-                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
->>>>>>> ddb4563204a0f52a875cf528223dad87ea037307
              }
          }
 

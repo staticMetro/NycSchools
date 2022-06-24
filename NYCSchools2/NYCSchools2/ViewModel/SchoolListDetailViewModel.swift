@@ -53,14 +53,15 @@ struct SchoolListDetailViewModel {
     }
 */
     func fetchCoordinates(_ schoolLocation: String?) -> CLLocationCoordinate2D? {
-        /**
+        /*
          if let schoolAddress = schoolLocation{
              let coordinateString = schoolAddress.slice(start: "(", end: ")")
              let coordinates = coordinateString?.components(separatedBy: ",")
              if let coordinateArray = coordinates{
                  let latitude = (coordinateArray[0] as NSString).doubleValue
                  let longitude = (coordinateArray[1] as NSString).doubleValue
-                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
+         longitude: CLLocationDegrees(longitude))
              }
          }
 

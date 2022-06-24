@@ -60,8 +60,8 @@ class SchoolListDetailViewController: UIViewController {
             mapView.setRegion(adjustRegion, animated: true)
         }
     }
-    func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D?{
-        if let schoolAddress = location{
+    func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D? {
+        if let schoolAddress = location {
             let coordinateString = schoolAddress.slice(start: "(", end: ")")
             let coordinates = coordinateString?.components(separatedBy: ",")
             if let coordinateArray = coordinates {
