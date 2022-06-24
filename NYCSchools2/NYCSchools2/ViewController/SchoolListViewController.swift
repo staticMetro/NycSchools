@@ -11,25 +11,21 @@ import MapKit
 class SchoolListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var alertController: UIAlertController?
     // @IBOutlet weak var searchBar: UISearchBar!
     var isAnimating = false
     var schoolListViewModel: SchoolListViewModel?
-
-    // /**SEARCH BAR CODE
     var searchController = UISearchController(searchResultsController: nil)
     var filteredSchools: [SchoolModel] = []
     var searchFooterBottomConstraint: NSLayoutConstraint!
-    // */
 
     override func viewDidLoad() {
         super.viewDidLoad()
         schoolListViewModel = SchoolListViewModel(self)
         self.title = "NYC Schools"
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.startAnimation()
-        filteredSchools = schoolListViewModel!.schools
-        searchBarSetup()
+        activityIndicator.startAnimating()
     }
     func searchBarSetup() {
         searchController.searchResultsUpdater = self
@@ -89,14 +85,20 @@ class SchoolListViewController: UIViewController {
      }
      */
     func fetchCoordinates(_ schoolLocation: String?) -> CLLocationCoordinate2D? {
-        /**
+        /*
+
          if let schoolAddress = schoolLocation{
              let coordinateString = schoolAddress.slice(start: "(", end: ")")
              let coordinates = coordinateString?.components(separatedBy: ",")
              if let coordinateArray = coordinates{
                  let latitude = (coordinateArray[0] as NSString).doubleValue
                  let longitude = (coordinateArray[1] as NSString).doubleValue
+<<<<<<< HEAD
+                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
+                                        longitude: CLLocationDegrees(longitude))
+=======
                  return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+>>>>>>> ddb4563204a0f52a875cf528223dad87ea037307
              }
          }
 
@@ -156,9 +158,9 @@ extension SchoolListViewController: UITableViewDelegate {
 extension SchoolListViewController: SchoolListViewControllerDelegate {
     func fetchSchoolListSuccess(_ failedError: Error?) {
         if let error = failedError {self.displayAlert(error)} else {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 self.tableView.reloadData()
-                self.stopAnimation()
+                activityIndicator.stopAnimating()
             }
         }
     }
@@ -166,7 +168,6 @@ extension SchoolListViewController: SchoolListViewControllerDelegate {
         if let error = failedError {self.displayAlert(error)}
     }
 }
-//  /**SEARCH BAR CODE
 extension SchoolListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
@@ -193,7 +194,7 @@ extension SchoolListViewController: UISearchResultsUpdating {
 
     func filterContentForSearchText(_ searchText: String) {
         filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
-            return school.school_name!.lowercased().contains(searchText.lowercased())
+            return school.schoolName!.lowercased().contains(searchText.lowercased())
         }))!
         tableView.reloadData()
     }

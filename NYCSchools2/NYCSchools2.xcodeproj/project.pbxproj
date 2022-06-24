@@ -94,8 +94,8 @@
 		3134D25D2858D86900AA8E40 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				31A858A32865093300E3DEA7 /* SchoolListDetailViewModel.swift */,
 				3134D25E2858D86900AA8E40 /* SchoolListViewModel.swift */,
+				31A858A32865093300E3DEA7 /* SchoolListDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -120,8 +120,8 @@
 		3134D2672858D86A00AA8E40 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3134D2682858D86A00AA8E40 /* SATScoreModel.swift */,
 				3134D2692858D86A00AA8E40 /* SchoolModel.swift */,
+				3134D2682858D86A00AA8E40 /* SATScoreModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

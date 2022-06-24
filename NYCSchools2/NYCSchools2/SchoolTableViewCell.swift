@@ -11,13 +11,12 @@ class SchoolTableViewCell: UITableViewCell {
 
     static let identifier = "SchoolTableViewCell"
 
-    @IBOutlet weak var schoolNameLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var navigateButton: UIButton!
+    @IBOutlet weak var schoolNameLabel: UILabel?
+    @IBOutlet weak var cityLabel: UILabel?
 
-    var school: SchoolModel! {
+    var school: SchoolModel? {
         didSet {
-            schoolNameLabel.text = school.school_name
+            schoolNameLabel?.text = school?.schoolName
             // if let city = school.city, let code = school.state_code, let zip = school.zip{
                // cityLabel.text = "\(city), \(code), \(zip)"
             // }
