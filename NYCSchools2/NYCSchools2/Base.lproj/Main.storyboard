@@ -12,8 +12,9 @@
         <scene sceneID="Ps1-GP-R6c">
             <objects>
                 <viewController id="tCB-Uf-MMU" customClass="SchoolListViewController" customModule="NYCSchools2" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="dnM-3V-1DT">
+                    <view key="view" contentMode="scaleAspectFit" id="dnM-3V-1DT">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cmi-pM-5y2">
                                 <rect key="frame" x="0.0" y="89" width="414" height="807"/>
@@ -21,9 +22,13 @@
                                 <color key="separatorColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexTrackingBackgroundColor" systemColor="systemBackgroundColor"/>
+                                <activityIndicatorView key="tableHeaderView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="kHT-uz-OpI">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </activityIndicatorView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SchoolTableViewCell" rowHeight="100" id="oGt-1F-8jP" customClass="SchoolTableViewCell" customModule="NYCSchools2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="100"/>
+                                        <rect key="frame" x="0.0" y="88.5" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oGt-1F-8jP" id="dcC-Eq-Gcf">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
@@ -43,27 +48,20 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Urd-Zp-dcf">
-                                                    <rect key="frame" x="30" y="64" width="364" height="30"/>
-                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="DHa-6h-YZq" firstAttribute="top" secondItem="dcC-Eq-Gcf" secondAttribute="top" id="7so-dG-lz9"/>
                                                 <constraint firstItem="DHa-6h-YZq" firstAttribute="left" secondItem="cPF-BS-kvw" secondAttribute="left" id="FhT-Mg-Zxj"/>
-                                                <constraint firstItem="DHa-6h-YZq" firstAttribute="trailing" secondItem="Urd-Zp-dcf" secondAttribute="trailing" id="I7D-SS-m8W"/>
                                                 <constraint firstItem="cPF-BS-kvw" firstAttribute="centerX" secondItem="dcC-Eq-Gcf" secondAttribute="centerX" constant="23" id="IU1-0x-qMA"/>
                                                 <constraint firstItem="DHa-6h-YZq" firstAttribute="left" secondItem="dcC-Eq-Gcf" secondAttribute="left" constant="20" id="YMa-h1-M32"/>
                                                 <constraint firstItem="cPF-BS-kvw" firstAttribute="top" secondItem="DHa-6h-YZq" secondAttribute="bottom" constant="-9" id="ZNg-eJ-Hzq"/>
-                                                <constraint firstItem="Urd-Zp-dcf" firstAttribute="top" secondItem="DHa-6h-YZq" secondAttribute="bottom" constant="15" id="f7W-zM-4eb"/>
                                                 <constraint firstAttribute="trailing" secondItem="DHa-6h-YZq" secondAttribute="trailing" constant="20" id="kvB-GZ-5VF"/>
-                                                <constraint firstItem="Urd-Zp-dcf" firstAttribute="centerX" secondItem="dcC-Eq-Gcf" secondAttribute="centerX" constant="5" id="tFc-jg-Ore"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <connections>
                                             <outlet property="cityLabel" destination="cPF-BS-kvw" id="ABj-p4-fil"/>
-                                            <outlet property="navigateButton" destination="Urd-Zp-dcf" id="HnR-R7-cuS"/>
                                             <outlet property="schoolNameLabel" destination="DHa-6h-YZq" id="lRj-bw-c9l"/>
                                         </connections>
                                     </tableViewCell>
@@ -85,6 +83,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="dqp-NF-mZ1"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="kHT-uz-OpI" id="gNw-YR-Bz2"/>
                         <outlet property="tableView" destination="Cmi-pM-5y2" id="UcW-xX-bJt"/>
                         <segue destination="SPv-sr-E0k" kind="show" identifier="mainToDetailSegue" id="TfC-up-HI0"/>
                     </connections>

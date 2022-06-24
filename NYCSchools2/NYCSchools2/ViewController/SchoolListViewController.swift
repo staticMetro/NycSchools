@@ -11,24 +11,18 @@ import MapKit
 class SchoolListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    var alertController: UIAlertController?
-    // @IBOutlet weak var searchBar: UISearchBar!
-    var isAnimating = false
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var schoolListViewModel: SchoolListViewModel?
-
-    // /**SEARCH BAR CODE
     var searchController = UISearchController(searchResultsController: nil)
     var filteredSchools: [SchoolModel] = []
     var searchFooterBottomConstraint: NSLayoutConstraint!
-    // */
 
     override func viewDidLoad() {
         super.viewDidLoad()
         schoolListViewModel = SchoolListViewModel(self)
         self.title = "NYC Schools"
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.startAnimation()
-        filteredSchools = schoolListViewModel!.schools
+        activityIndicator.startAnimating()
         searchBarSetup()
     }
     func searchBarSetup() {
@@ -38,20 +32,6 @@ class SchoolListViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-    }
-    func startAnimation() {
-        if self.isAnimating == false {
-            self.isAnimating = true
-            self.alertController = UIAlertController(title: "NYC Schools",
-                                                     message: "Fetching data", preferredStyle: .alert)
-            self.present(self.alertController!, animated: true, completion: nil)
-        }
-    }
-
-    func stopAnimation() {
-        self.alertController?.dismiss(animated: true, completion: nil)
-        self.alertController = nil
-        self.isAnimating = false
     }
 
     // Function to throw alert.
@@ -78,25 +58,17 @@ class SchoolListViewController: UIViewController {
             detailsView?.loadDetailView(school)
         }
     }
-
-    // Navigate to the school address, by clicking "Navigate" button.
-    /*
-     func navigateToAddress(_ sender: UIButton){
-
-
-
-
-     }
-     */
     func fetchCoordinates(_ schoolLocation: String?) -> CLLocationCoordinate2D? {
-        /**
+        /*
+
          if let schoolAddress = schoolLocation{
              let coordinateString = schoolAddress.slice(start: "(", end: ")")
              let coordinates = coordinateString?.components(separatedBy: ",")
              if let coordinateArray = coordinates{
                  let latitude = (coordinateArray[0] as NSString).doubleValue
                  let longitude = (coordinateArray[1] as NSString).doubleValue
-                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
+                                        longitude: CLLocationDegrees(longitude))
              }
          }
 
@@ -156,9 +128,9 @@ extension SchoolListViewController: UITableViewDelegate {
 extension SchoolListViewController: SchoolListViewControllerDelegate {
     func fetchSchoolListSuccess(_ failedError: Error?) {
         if let error = failedError {self.displayAlert(error)} else {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 self.tableView.reloadData()
-                self.stopAnimation()
+                activityIndicator.stopAnimating()
             }
         }
     }
@@ -166,7 +138,6 @@ extension SchoolListViewController: SchoolListViewControllerDelegate {
         if let error = failedError {self.displayAlert(error)}
     }
 }
-//  /**SEARCH BAR CODE
 extension SchoolListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
@@ -193,7 +164,7 @@ extension SchoolListViewController: UISearchResultsUpdating {
 
     func filterContentForSearchText(_ searchText: String) {
         filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
-            return school.school_name!.lowercased().contains(searchText.lowercased())
+            return school.schoolName!.lowercased().contains(searchText.lowercased())
         }))!
         tableView.reloadData()
     }
