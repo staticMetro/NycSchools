@@ -22,13 +22,9 @@
                                 <color key="separatorColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexTrackingBackgroundColor" systemColor="systemBackgroundColor"/>
-                                <activityIndicatorView key="tableHeaderView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="kHT-uz-OpI">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </activityIndicatorView>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SchoolTableViewCell" rowHeight="100" id="oGt-1F-8jP" customClass="SchoolTableViewCell" customModule="NYCSchools2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="88.5" width="414" height="100"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SchoolTableViewCell" rowHeight="100" id="oGt-1F-8jP" customClass="SchoolTableViewCell" customModule="NYCSchools2" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oGt-1F-8jP" id="dcC-Eq-Gcf">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
@@ -71,6 +67,17 @@
                                     <outlet property="delegate" destination="tCB-Uf-MMU" id="MPI-QE-YHA"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleAspectFit" id="C9W-fF-ggc">
+                                <rect key="frame" x="87" y="384" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="kHT-uz-OpI">
+                                        <rect key="frame" x="-87" y="42" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WNt-Ym-5kg"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -84,6 +91,7 @@
                     <navigationItem key="navigationItem" id="dqp-NF-mZ1"/>
                     <connections>
                         <outlet property="activityIndicator" destination="kHT-uz-OpI" id="gNw-YR-Bz2"/>
+                        <outlet property="activityView" destination="C9W-fF-ggc" id="zIu-ce-M2s"/>
                         <outlet property="tableView" destination="Cmi-pM-5y2" id="UcW-xX-bJt"/>
                         <segue destination="SPv-sr-E0k" kind="show" identifier="mainToDetailSegue" id="TfC-up-HI0"/>
                     </connections>
