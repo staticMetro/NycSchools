@@ -21,8 +21,7 @@ class SchoolListDetailViewController: UIViewController {
     @IBOutlet weak private var emailLabel: UILabel!
     @IBOutlet weak private var faxNumberLabel: UILabel!
     @IBOutlet weak private var mapView: MKMapView!
-
-    var schoolListDetailViewModel = SchoolListDetailViewModel()
+    private var schoolListDetailViewModel = SchoolListDetailViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()

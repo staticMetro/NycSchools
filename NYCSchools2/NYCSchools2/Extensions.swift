@@ -18,29 +18,24 @@ extension String {
     }
 }
 extension SchoolListViewController {
-    func updateSearchResults(for searchController: UISearchController) {
-        let searchBar = searchController.searchBar
-        filterContentForSearchText(searchBar.text!)
-    }
     func handleKeyboard(notification: Notification) {
         guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {
             searchFooterBottomConstraint.constant = 0
             view.layoutIfNeeded()
             return
         }
-
         guard let info = notification.userInfo,
-                let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-
+              let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardHeight = keyboardFrame.cgRectValue.size.height
         UIView.animate(withDuration: 0.1) {
             self.searchFooterBottomConstraint.constant = keyboardHeight
             self.view.layoutIfNeeded()
         }
     }
-    func isFiltering() -> Bool {return searchController.isActive && !searchBarIsEmpty()}
-    func searchBarIsEmpty() -> Bool {return searchController.searchBar.text?.isEmpty ?? true}
-
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
+    }
     func filterContentForSearchText(_ searchText: String) {
         schoolListViewModel?.filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
             return school.schoolName!.lowercased().contains(searchText.lowercased())
@@ -50,19 +45,16 @@ extension SchoolListViewController {
 }
 extension SchoolListViewController {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering() {
-        // if schoolListViewModel?.isFiltering(searchController) != nil {
+        if schoolListViewModel?.isFiltering(searchController) != false {
             return schoolListViewModel?.filteredSchools.count ?? 0
         }
         return schoolListViewModel?.numberOfRows(inSection: section) ?? 0
     }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // swiftlint:disable force_cast
         let cell = tableView.dequeueReusableCell(withIdentifier: SchoolTableViewCell.identifier) as! SchoolTableViewCell
         // swiftlint:enable force_cast
-        if isFiltering() {
-        // if schoolListViewModel?.isFiltering(searchController) != nil {
+        if schoolListViewModel?.isFiltering(searchController) != false {
             cell.school = schoolListViewModel?.filteredSchools[indexPath.row]
         } else {
             cell.school = schoolListViewModel!.data(forRowAt: indexPath)
@@ -70,12 +62,18 @@ extension SchoolListViewController {
         return cell
     }
     func tableView(_ tableView: UITableView,
-                   heightForRowAt indexPath: IndexPath) -> CGFloat {return 32}
+                   heightForRowAt indexPath: IndexPath) -> CGFloat {return 64}
 }
 
 extension SchoolListViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let school = schoolListViewModel!.data(forRowAt: indexPath)
+        let school: SchoolModel
+        if schoolListViewModel?.isFiltering(searchController) != false {
+            school = schoolListViewModel?.filteredSchools[indexPath.row] ??
+            schoolListViewModel!.data(forRowAt: indexPath)
+        } else {
+            school = schoolListViewModel!.data(forRowAt: indexPath)
+        }
         self.performSegue(withIdentifier: "mainToDetailSegue", sender: school)
     }
 }

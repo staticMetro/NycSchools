@@ -67,7 +67,7 @@
                                     <outlet property="delegate" destination="tCB-Uf-MMU" id="MPI-QE-YHA"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleAspectFit" id="C9W-fF-ggc">
+                            <view hidden="YES" contentMode="scaleAspectFit" id="C9W-fF-ggc">
                                 <rect key="frame" x="87" y="384" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>

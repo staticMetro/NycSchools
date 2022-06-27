@@ -18,9 +18,6 @@ struct APIURLS {
 }
 
 class SchoolsDataManager {
-    // static let appToken = "ke4ouJojh6vYDs9HeqQHur8oq"
-    // static let apiKey = "980qm08vatbpyidd7felxnrm4"
-
     func fetchData(urlString: String, completionHandler: @escaping (Any?, Error?) -> Void) {
         guard let urlLink = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
         else {

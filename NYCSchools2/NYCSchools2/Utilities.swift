@@ -23,18 +23,6 @@ class Utilities {
     }
 
     static func fetchCoordinates(_ location: String?) -> CLLocationCoordinate2D? {
-        /*
-         if let schoolAddress = location{
-             let coordinateString = schoolAddress.slice(start: "(", end: ")")
-             let coordinates = coordinateString?.components(separatedBy: ",")
-             if let coordinateArray = coordinates{
-                 let latitude = (coordinateArray[0] as NSString).doubleValue
-                 let longitude = (coordinateArray[1] as NSString).doubleValue
-                 return CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude),
-                                        longitude: CLLocationDegrees(longitude))
-             }
-         }
-         */
         guard let schoolAddress = location,
               let coordinateString = schoolAddress.slice(start: "(", end: ")") else {
             return CLLocationCoordinate2D(latitude: CLLocationDegrees(0),

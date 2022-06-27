@@ -37,6 +37,7 @@ class SchoolListViewModel {
                     let schoolsList = try JSONDecoder().decode([SchoolModel].self, from: resultData as! Data)
                     // swiftlint:enable force_cast
                     schools = schoolsList
+                    filteredSchools = schools
                     fetchSATScores()
                 } catch {
                     schoolListViewModelDelegateProtocol?.fetchSchoolListSuccess(error)
@@ -84,7 +85,6 @@ class SchoolListViewModel {
     func isFiltering(_ searchController: UISearchController) -> Bool {
         return searchController.isActive && !searchBarIsEmpty(searchController)
     }
-
     func searchBarIsEmpty(_ searchController: UISearchController)
     -> Bool {return searchController.searchBar.text?.isEmpty ?? true}
 
