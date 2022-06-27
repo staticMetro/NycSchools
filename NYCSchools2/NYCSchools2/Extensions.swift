@@ -51,6 +51,7 @@ extension SchoolListViewController {
 extension SchoolListViewController {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering() {
+        // if schoolListViewModel?.isFiltering(searchController) != nil {
             return schoolListViewModel?.filteredSchools.count ?? 0
         }
         return schoolListViewModel?.numberOfRows(inSection: section) ?? 0
@@ -61,15 +62,15 @@ extension SchoolListViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: SchoolTableViewCell.identifier) as! SchoolTableViewCell
         // swiftlint:enable force_cast
         if isFiltering() {
+        // if schoolListViewModel?.isFiltering(searchController) != nil {
             cell.school = schoolListViewModel?.filteredSchools[indexPath.row]
         } else {
             cell.school = schoolListViewModel!.data(forRowAt: indexPath)
         }
         return cell
     }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 32
-    }
+    func tableView(_ tableView: UITableView,
+                   heightForRowAt indexPath: IndexPath) -> CGFloat {return 32}
 }
 
 extension SchoolListViewController {
@@ -85,6 +86,8 @@ extension SchoolListViewController {
             DispatchQueue.main.async { [self] in
                 tableView.reloadData()
                 activityIndicator.stopAnimating()
+                activityIndicator.hidesWhenStopped = true
+                activityView.isHidden = true
             }
         }
     }

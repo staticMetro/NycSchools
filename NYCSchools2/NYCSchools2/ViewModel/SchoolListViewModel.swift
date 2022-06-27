@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SchoolListViewModelDelegateProtocol: AnyObject {
     func fetchSchoolListSuccess(_ failedError: Error?)
@@ -17,10 +18,10 @@ class SchoolListViewModel {
     internal var filteredSchools: [SchoolModel] = []
     internal var satResults: [SATScoreModel] = []
     private var schoolsDataManager = SchoolsDataManager()
-    private weak var schoolsListViewControllerDelegate: SchoolListViewModelDelegateProtocol?
+    private weak var schoolListViewModelDelegateProtocol: SchoolListViewModelDelegateProtocol?
 
     init(_ schoolsListViewControllerDelegate: SchoolListViewModelDelegateProtocol) {
-        self.schoolsListViewControllerDelegate = schoolsListViewControllerDelegate
+        self.schoolListViewModelDelegateProtocol = schoolsListViewControllerDelegate
         fetchSchools()
     }
     func numberOfRows(inSection section: Int) -> Int {return schools.count}
@@ -30,7 +31,7 @@ class SchoolListViewModel {
         schoolsDataManager.fetchData(urlString: APIURLS.fetchSchoolsLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError
-                schoolsListViewControllerDelegate?.fetchSchoolListSuccess(error)
+                schoolListViewModelDelegateProtocol?.fetchSchoolListSuccess(error)
                 do {
                     // swiftlint:disable force_cast
                     let schoolsList = try JSONDecoder().decode([SchoolModel].self, from: resultData as! Data)
@@ -38,7 +39,7 @@ class SchoolListViewModel {
                     schools = schoolsList
                     fetchSATScores()
                 } catch {
-                    schoolsListViewControllerDelegate?.fetchSchoolListSuccess(error)
+                    schoolListViewModelDelegateProtocol?.fetchSchoolListSuccess(error)
                 }
                 return
             }
@@ -48,16 +49,16 @@ class SchoolListViewModel {
         schoolsDataManager.fetchData(urlString: APIURLS.fetchSATScoresLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError
-                schoolsListViewControllerDelegate?.fetchSATSuccess(error)
+                schoolListViewModelDelegateProtocol?.fetchSATSuccess(error)
                 do {
                     // swiftlint:disable force_cast
                     let satScores = try JSONDecoder().decode([SATScoreModel].self, from: resultData as! Data)
                     // swiftlint:enable force_cast
                     mapSATScores(satScores)
-                    schoolsListViewControllerDelegate?.fetchSchoolListSuccess(fetchError)
-                    schoolsListViewControllerDelegate?.fetchSATSuccess(fetchError)
+                    schoolListViewModelDelegateProtocol?.fetchSchoolListSuccess(fetchError)
+                    schoolListViewModelDelegateProtocol?.fetchSATSuccess(fetchError)
                 } catch {
-                    schoolsListViewControllerDelegate?.fetchSATSuccess(error)
+                    schoolListViewModelDelegateProtocol?.fetchSATSuccess(error)
                 }
                 return
             }
@@ -80,4 +81,11 @@ class SchoolListViewModel {
             }
         }
     }
+    func isFiltering(_ searchController: UISearchController) -> Bool {
+        return searchController.isActive && !searchBarIsEmpty(searchController)
+    }
+
+    func searchBarIsEmpty(_ searchController: UISearchController)
+    -> Bool {return searchController.searchBar.text?.isEmpty ?? true}
+
 }

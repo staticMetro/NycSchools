@@ -11,6 +11,7 @@ import MapKit
 class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITableViewDataSource,
                                 UITableViewDelegate, SchoolListViewModelDelegateProtocol {
     @IBOutlet weak internal var tableView: UITableView!
+    @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
     internal var schoolListViewModel: SchoolListViewModel?
     internal var searchController = UISearchController(searchResultsController: nil)
@@ -46,6 +47,13 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
             detailsView?.view.tag = 0
             detailsView?.loadDetailView(school)
         }
+
+         guard let school = sender as? SchoolModel,
+         let detailsView = segue.destination as? SchoolListDetailViewController else {
+             return
+         }
+         detailsView.view.tag = 0
+         detailsView.loadDetailView(school)
          */
         guard let school = sender as? SchoolModel,
         let detailsView = segue.destination as? SchoolListDetailViewController else {
