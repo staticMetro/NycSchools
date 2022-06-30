@@ -38,7 +38,7 @@ extension SchoolListViewController {
     }
     func filterContentForSearchText(_ searchText: String) {
         schoolListViewModel?.filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
-            return school.schoolName!.lowercased().contains(searchText.lowercased())
+            return school.schoolName?.lowercased().contains(searchText.lowercased()) ?? false
         }))!
         tableView.reloadData()
     }
@@ -57,7 +57,7 @@ extension SchoolListViewController {
         if schoolListViewModel?.isFiltering(searchController) != false {
             cell.school = schoolListViewModel?.filteredSchools[indexPath.row]
         } else {
-            cell.school = schoolListViewModel!.data(forRowAt: indexPath)
+            cell.school = schoolListViewModel?.data(forRowAt: indexPath)
         }
         return cell
     }
@@ -67,12 +67,11 @@ extension SchoolListViewController {
 
 extension SchoolListViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let school: SchoolModel
+        let school: SchoolModel?
         if schoolListViewModel?.isFiltering(searchController) != false {
-            school = schoolListViewModel?.filteredSchools[indexPath.row] ??
-            schoolListViewModel!.data(forRowAt: indexPath)
+            school = schoolListViewModel?.filteredSchools[indexPath.row]
         } else {
-            school = schoolListViewModel!.data(forRowAt: indexPath)
+            school = schoolListViewModel?.data(forRowAt: indexPath)
         }
         self.performSegue(withIdentifier: "mainToDetailSegue", sender: school)
     }
@@ -89,7 +88,5 @@ extension SchoolListViewController {
             }
         }
     }
-    func fetchSATSuccess(_ failedError: Error?) {
-        if let error = failedError {self.displayAlert(error)}
-    }
+    func fetchSATSuccess(_ failedError: Error?) {if let error = failedError {self.displayAlert(error)}}
 }

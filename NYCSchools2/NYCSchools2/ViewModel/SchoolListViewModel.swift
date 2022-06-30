@@ -17,18 +17,19 @@ class SchoolListViewModel {
     internal var schools: [SchoolModel] = []
     internal var filteredSchools: [SchoolModel] = []
     internal var satResults: [SATScoreModel] = []
-    private var schoolsDataManager = SchoolsDataManager()
+    // private var schoolsDataManager = SchoolsDataManager()
     private weak var schoolListViewModelDelegateProtocol: SchoolListViewModelDelegateProtocol?
 
-    init(_ schoolsListViewControllerDelegate: SchoolListViewModelDelegateProtocol) {
-        self.schoolListViewModelDelegateProtocol = schoolsListViewControllerDelegate
+    init() {
+        // schoolListViewModelDelegateProtocol = schoolsListViewControllerDelegate
         fetchSchools()
     }
     func numberOfRows(inSection section: Int) -> Int {return schools.count}
     func data(forRowAt indexPath: IndexPath) -> SchoolModel {return schools[indexPath.row]}
 
     func fetchSchools() {
-        schoolsDataManager.fetchData(urlString: APIURLS.fetchSchoolsLink) { [self] (resultData, fetchError) in
+        SchoolsCoordinator().schoolsDataManager.fetchData(
+            urlString: APIURLS.fetchSchoolsLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError
                 schoolListViewModelDelegateProtocol?.fetchSchoolListSuccess(error)
@@ -47,7 +48,8 @@ class SchoolListViewModel {
         }
     }
     func fetchSATScores() {
-        schoolsDataManager.fetchData(urlString: APIURLS.fetchSATScoresLink) { [self] (resultData, fetchError) in
+        SchoolsCoordinator().schoolsDataManager.fetchData(
+            urlString: APIURLS.fetchSATScoresLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError
                 schoolListViewModelDelegateProtocol?.fetchSATSuccess(error)
