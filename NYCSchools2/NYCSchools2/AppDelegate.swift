@@ -11,19 +11,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    private let schoolsCoordinator = SchoolsCoordinator()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-
-        let schoolsCoordinator = SchoolsCoordinator()
-        let navSchoolVC = UINavigationController()
-        schoolsCoordinator.navController = navSchoolVC
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = navSchoolVC
-        self.window = window
+        window = UIWindow(frame: UIScreen.main.bounds)
         schoolsCoordinator.start()
-        window.makeKeyAndVisible()
+        window?.rootViewController = schoolsCoordinator.rootViewController
+        window?.makeKeyAndVisible()
 
         return true
     }

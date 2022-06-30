@@ -9,6 +9,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    private let schoolsCoordinator = SchoolsCoordinator()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -17,16 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or
         // session are new (see `application:configurationForConnectingSceneSession` instead).
-/*
-        let schoolsCoordinator = SchoolsCoordinator()
-        let navSchoolVC = UINavigationController()
-        schoolsCoordinator.navController = navSchoolVC
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = navSchoolVC
-        self.window = window
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = schoolsCoordinator.rootViewController
+        window?.makeKeyAndVisible()
         schoolsCoordinator.start()
-        window.makeKeyAndVisible()
- */
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

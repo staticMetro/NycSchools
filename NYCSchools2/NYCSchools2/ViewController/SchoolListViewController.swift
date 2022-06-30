@@ -22,8 +22,8 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
         schoolListViewModel = SchoolListViewModel()
         title = "NYC Schools"
         navigationController?.navigationBar.prefersLargeTitles = true
-        activityIndicator.startAnimating()
         searchBarSetup()
+        activityIndicator.startAnimating()
     }
     func searchBarSetup() {
         searchController.searchResultsUpdater = self

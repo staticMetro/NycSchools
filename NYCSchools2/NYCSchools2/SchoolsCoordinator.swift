@@ -15,32 +15,24 @@ protocol Coordinator {
 class SchoolsCoordinator: Coordinator {
     internal var navController: UINavigationController?
     internal var schoolsDataManager = SchoolsDataManager()
+    internal var rootViewController: UIViewController {
+        return navController ?? UINavigationController()
+    }
 
     func start() {
-       // let schoolListProtocol = SchoolListViewModelDelegateProtocol
-        let viewModel = SchoolListViewModel()
-        let schoolListViewController = SchoolListViewController()
-        schoolListViewController.schoolListViewModel = viewModel
-        navController?.pushViewController(schoolListViewController, animated: true)
-/*
-        { [weak self] action in
-            switch action {
-            case .exit:
-                // de
-                break
-            case .details:
-                self?.coordinateToDetailsViewController()
-            }
-        }
- let schoolListViewController = SchoolListViewController()
- schoolListViewController.schoolListViewModel = viewModel
- window.rootViewController = schoolListViewController
- */
-
+        showSchoolsList()
     }
     func coordinateToDetails() {
         // let schoolDetailsVM = SchoolListDetailViewModel()
         let schoolListDetailVC = SchoolListDetailViewController()
         navController?.pushViewController(schoolListDetailVC, animated: true)
+    }
+    func showSchoolsList() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let schoolListViewController = storyboard.instantiateViewController(withIdentifier: "SchoolsListViewController")
+        guard let schoolsListViewController = schoolListViewController as? SchoolListViewController else {
+            fatalError("Unable to instantiate School List View Controller")
+        }
+        navController?.pushViewController(schoolsListViewController, animated: true)
     }
 }
