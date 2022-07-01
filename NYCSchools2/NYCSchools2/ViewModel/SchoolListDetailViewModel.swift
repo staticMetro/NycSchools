@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import MapKit
 
-protocol SchoolListDetailViewModelDelegateProtocol {
+protocol SchoolListDetailViewModelProtocol {
     func loadDetailView(_ school: SchoolModel)
 }
 

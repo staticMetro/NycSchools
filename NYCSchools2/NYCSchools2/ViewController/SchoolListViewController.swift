@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 
 class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITableViewDataSource,
-                                UITableViewDelegate, SchoolListViewModelDelegateProtocol {
+                                UITableViewDelegate, SchoolListViewModelProtocol {
     @IBOutlet weak internal var tableView: UITableView!
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
@@ -21,8 +21,8 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
         super.viewDidLoad()
         title = "NYC Schools"
         navigationController?.navigationBar.prefersLargeTitles = true
+        // activityIndicator.startAnimating()
         searchBarSetup()
-        activityIndicator.startAnimating()
     }
     func searchBarSetup() {
         searchController.searchResultsUpdater = self

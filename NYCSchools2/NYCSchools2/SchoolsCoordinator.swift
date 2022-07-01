@@ -20,14 +20,21 @@ class SchoolsCoordinator: Coordinator {
     }
 
     func start() {
-        showSchoolsList()
+        coordinateToSchoolsList()
     }
     func coordinateToDetails() {
-        // let schoolDetailsVM = SchoolListDetailViewModel()
-        let schoolListDetailVC = SchoolListDetailViewController()
-        navigationController.pushViewController(schoolListDetailVC, animated: false)
+        let storyboard = UIStoryboard(name: "SchoolListDetailsViewController", bundle: nil)
+        let schoolListDetailsViewController = storyboard.instantiateViewController(withIdentifier: "SchoolListDetailViewController")
+        let detailsViewModel = SchoolListDetailViewModel()
+
+        guard let schoolListDetailsViewController = schoolListDetailsViewController as? SchoolListDetailViewController else {
+            fatalError("Unable to instantiate School List View Controller")
+        }
+        // schoolListDetailsViewController.schoolListDetailsViewModel = detailsViewModel
+        navigationController.viewControllers.append(schoolListDetailsViewController)
+
     }
-    private func showSchoolsList() {
+    private func coordinateToSchoolsList() {
 
         let storyboard = UIStoryboard(name: "SchoolListViewController", bundle: nil)
         let schoolListViewController = storyboard.instantiateViewController(withIdentifier: "SchoolsListViewController")

@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--School List Detail View Controller-->
+        <!--SchoolListDetailViewController-->
         <scene sceneID="d7H-XZ-OWU">
             <objects>
-                <viewController id="xWg-7k-dgo" customClass="SchoolListDetailViewController" customModule="NYCSchools2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SchoolListDetailViewController" title="SchoolListDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xWg-7k-dgo" customClass="SchoolListDetailViewController" customModule="NYCSchools2" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="72G-Fe-Aps">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

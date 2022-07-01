@@ -27,7 +27,7 @@ class SchoolListDetailViewController: UIViewController {
         super.viewDidLoad()
     }
 }
-extension SchoolListDetailViewController: SchoolListDetailViewModelDelegateProtocol {
+extension SchoolListDetailViewController: SchoolListDetailViewModelProtocol {
     func loadDetailView(_ school: SchoolModel) {
         schoolNameLabel.text = school.schoolName
         if let readingScore = school.satScores?.satReadingScore {
@@ -44,7 +44,7 @@ extension SchoolListDetailViewController: SchoolListDetailViewModelDelegateProto
         }
         addressLineLabel.text = school.primaryAddress
         websiteLabel.text = school.website
-        phoneNumberLabel.text = "Phone Number: " + (school.phoneNumber)!
+        phoneNumberLabel.text = (school.phoneNumber)!
         emailLabel.text = school.schoolEmail
         faxNumberLabel.text = school.faxNumber
         Utilities.setLocation(school.location, mapView)
