@@ -13,14 +13,21 @@ protocol SchoolListViewModelDelegateProtocol: AnyObject {
     func fetchSATSuccess(_ failedError: Error?)
 }
 
+enum SchoolListExampleViewModelAction {
+    case exit // for cancel button
+    case details
+}
+
 class SchoolListViewModel {
     internal var schools: [SchoolModel] = []
     internal var filteredSchools: [SchoolModel] = []
     internal var satResults: [SATScoreModel] = []
-    // private var schoolsDataManager = SchoolsDataManager()
+    private let dataManager: SchoolsDataManager
     private weak var schoolListViewModelDelegateProtocol: SchoolListViewModelDelegateProtocol?
+    var endClosure: ((SchoolListExampleViewModelAction) -> Void)?
 
-    init() {
+    init(dataManager: SchoolsDataManager) {
+        self.dataManager = dataManager
         // schoolListViewModelDelegateProtocol = schoolsListViewControllerDelegate
         fetchSchools()
     }
@@ -28,7 +35,7 @@ class SchoolListViewModel {
     func data(forRowAt indexPath: IndexPath) -> SchoolModel {return schools[indexPath.row]}
 
     func fetchSchools() {
-        SchoolsCoordinator().schoolsDataManager.fetchData(
+        dataManager.fetchData(
             urlString: APIURLS.fetchSchoolsLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError
@@ -48,7 +55,7 @@ class SchoolListViewModel {
         }
     }
     func fetchSATScores() {
-        SchoolsCoordinator().schoolsDataManager.fetchData(
+        dataManager.fetchData(
             urlString: APIURLS.fetchSATScoresLink) { [self] (resultData, fetchError) in
             guard fetchError != nil else {
                 let error = fetchError

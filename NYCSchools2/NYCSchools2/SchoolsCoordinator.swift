@@ -9,14 +9,14 @@ import Foundation
 import UIKit
 
 protocol Coordinator {
-    var navController: UINavigationController? {get set}
     func start()
 }
 class SchoolsCoordinator: Coordinator {
-    internal var navController: UINavigationController?
-    internal var schoolsDataManager = SchoolsDataManager()
-    internal var rootViewController: UIViewController {
-        return navController ?? UINavigationController()
+    private let navigationController: UINavigationController
+    var schoolsDataManager = SchoolsDataManager()
+
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
     }
 
     func start() {
@@ -25,14 +25,24 @@ class SchoolsCoordinator: Coordinator {
     func coordinateToDetails() {
         // let schoolDetailsVM = SchoolListDetailViewModel()
         let schoolListDetailVC = SchoolListDetailViewController()
-        navController?.pushViewController(schoolListDetailVC, animated: true)
+        navigationController.pushViewController(schoolListDetailVC, animated: false)
     }
-    func showSchoolsList() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    private func showSchoolsList() {
+
+        let storyboard = UIStoryboard(name: "SchoolListViewController", bundle: nil)
         let schoolListViewController = storyboard.instantiateViewController(withIdentifier: "SchoolsListViewController")
+        let viewModel = SchoolListViewModel(dataManager: SchoolsDataManager())
+        /*
+        viewModel.endClosure = { action in
+            switch action {
+            case .
+            }
+        }
+         */
         guard let schoolsListViewController = schoolListViewController as? SchoolListViewController else {
             fatalError("Unable to instantiate School List View Controller")
         }
-        navController?.pushViewController(schoolsListViewController, animated: true)
+        schoolsListViewController.schoolListViewModel = viewModel
+        navigationController.viewControllers = [schoolsListViewController]
     }
 }

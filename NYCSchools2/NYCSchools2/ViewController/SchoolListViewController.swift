@@ -13,13 +13,12 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
     @IBOutlet weak internal var tableView: UITableView!
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
-    internal var schoolListViewModel: SchoolListViewModel?
-    internal var searchController = UISearchController(searchResultsController: nil)
-    internal var searchFooterBottomConstraint: NSLayoutConstraint!
+    var schoolListViewModel: SchoolListViewModel?
+    var searchController = UISearchController(searchResultsController: nil)
+    var searchFooterBottomConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        schoolListViewModel = SchoolListViewModel()
         title = "NYC Schools"
         navigationController?.navigationBar.prefersLargeTitles = true
         searchBarSetup()
