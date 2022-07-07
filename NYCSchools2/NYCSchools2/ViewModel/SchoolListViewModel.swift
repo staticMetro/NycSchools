@@ -7,32 +7,66 @@
 
 import Foundation
 import UIKit
+/* Tim: MVVM-C Example
+ protocol SchoolListExampleViewModelProtocol {
+     func numberOfRowsInSection(in section: Int) -> Int
+     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell
+     func heightForRowAt(indexPath: IndexPath) -> CGFloat
+     func didSelectRowAt(indexPath: IndexPath)
+     func handleAction(action: SchoolListExampleViewModelAction)
+ }
+ enum SchoolListExampleViewModelAction {
+     case exit // for cancel button
+     case details
+ }
 
+ struct SchoolListExampleViewModel: SchoolListExampleViewModelProtocol {
+     var endClosure: ((SchoolListExampleViewModelAction) -> Void)?
+     func numberOfRowsInSection(in section: Int) -> Int {
+         <#code#>
+     }
+     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell {
+         <#code#>
+     }
+     func heightForRowAt(indexPath: IndexPath) -> CGFloat {f
+         <#code#>
+     }
+     func didSelectRowAt(indexPath: IndexPath) {
+     }
+     func handleAction(action: SchoolListExampleViewModelAction) {
+         endClosure?(action)
+     }
+ }
+ */
 protocol SchoolListViewModelProtocol: AnyObject {
     func fetchSchoolListSuccess(_ failedError: Error?)
     func fetchSATSuccess(_ failedError: Error?)
+    func handleAction(action: SchoolListViewModelAction)
 }
 
-enum SchoolListExampleViewModelAction {
+enum SchoolListViewModelAction {
     case exit // for cancel button
-    case details
+    case details // for school details
 }
 
 class SchoolListViewModel {
-    internal var schools: [SchoolModel] = []
-    internal var filteredSchools: [SchoolModel] = []
-    internal var satResults: [SATScoreModel] = []
+    var schools: [SchoolModel] = []
+    var filteredSchools: [SchoolModel] = []
+    var satResults: [SATScoreModel] = []
     private let dataManager: SchoolsDataManager
     private weak var schoolListViewModelProtocol: SchoolListViewModelProtocol?
-    var endClosure: ((SchoolListExampleViewModelAction) -> Void)?
+    var endClosure: ((SchoolListViewModelAction) -> Void)?
 
-    init(dataManager: SchoolsDataManager //
-         // schoolListViewModelProtocol: SchoolListViewModelProtocol?
+    init(dataManager: SchoolsDataManager// schoolListViewModelProtocol: SchoolListViewModelProtocol?
     ) {
         self.dataManager = dataManager
         // self.schoolListViewModelProtocol = schoolListViewModelProtocol
         fetchSchools()
     }
+    func handleAction(action: SchoolListViewModelAction) {
+        endClosure?(action)
+    }
+
     func numberOfRows(inSection section: Int) -> Int {return schools.count}
     func data(forRowAt indexPath: IndexPath) -> SchoolModel {return schools[indexPath.row]}
 
@@ -94,6 +128,13 @@ class SchoolListViewModel {
         }
         // for loop that adds remaining schools that do not have sat scores to list
         // & provides explanation: "No score avialable. Please contact the school for more info"
+        /*
+        for school in previous {
+            if (previous.contains(where: (SchoolModel) throws -> Bool)) {
+                self.schools.append(school)
+            }
+        }
+         */
     }
     func isFiltering(_ searchController: UISearchController) -> Bool {
         return searchController.isActive && !searchBarIsEmpty(searchController)
@@ -101,4 +142,22 @@ class SchoolListViewModel {
     func searchBarIsEmpty(_ searchController: UISearchController)
     -> Bool {return searchController.searchBar.text?.isEmpty ?? true}
 
+    // Function to throw alert.
+    func displayAlert(_ error: Error) {
+            print("Error while fetching Schools.")
+            print(error.localizedDescription)
+    }
+    /*
+    func fetchSchoolListSuccess(_ failedError: Error?) {
+        if let error = failedError {displayAlert(error)} else {
+            DispatchQueue.main.async { [self] in
+                // tableView.reloadData()
+                // activityIndicator.stopAnimating()
+                // activityIndicator.hidesWhenStopped = true
+                // activityView.isHidden = true
+            }
+        }
+    }
+    func fetchSATSuccess(_ failedError: Error?) {if let error = failedError {self.displayAlert(error)}}
+     */
 }

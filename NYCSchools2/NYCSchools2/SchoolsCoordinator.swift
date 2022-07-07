@@ -22,34 +22,89 @@ class SchoolsCoordinator: Coordinator {
     func start() {
         coordinateToSchoolsList()
     }
-    func coordinateToDetails() {
-        let storyboard = UIStoryboard(name: "SchoolListDetailsViewController", bundle: nil)
-        let schoolListDetailsViewController = storyboard.instantiateViewController(withIdentifier: "SchoolListDetailViewController")
-        let detailsViewModel = SchoolListDetailViewModel()
-
-        guard let schoolListDetailsViewController = schoolListDetailsViewController as? SchoolListDetailViewController else {
-            fatalError("Unable to instantiate School List View Controller")
-        }
-        // schoolListDetailsViewController.schoolListDetailsViewModel = detailsViewModel
-        navigationController.viewControllers.append(schoolListDetailsViewController)
-
-    }
-    private func coordinateToSchoolsList() {
-
+    func coordinateToSchoolsList() {
         let storyboard = UIStoryboard(name: "SchoolListViewController", bundle: nil)
-        let schoolListViewController = storyboard.instantiateViewController(withIdentifier: "SchoolsListViewController")
-        let viewModel = SchoolListViewModel(dataManager: SchoolsDataManager())
-        /*
-        viewModel.endClosure = { action in
-            switch action {
-            case .
-            }
-        }
-         */
-        guard let schoolsListViewController = schoolListViewController as? SchoolListViewController else {
+        guard let schoolsListViewController = storyboard.instantiateViewController(
+            withIdentifier: "SchoolsListViewController") as? SchoolListViewController else {
             fatalError("Unable to instantiate School List View Controller")
+        }
+        let viewModel = SchoolListViewModel(dataManager: SchoolsDataManager())
+        viewModel.endClosure = { [weak self] action in
+            switch action {
+            case .exit:
+                // de
+                break
+            case .details:
+                self?.coordinateToSchoolDetails()
+            }
         }
         schoolsListViewController.schoolListViewModel = viewModel
         navigationController.viewControllers = [schoolsListViewController]
     }
+    func coordinateToSchoolDetails() {
+        let storyboard = UIStoryboard(name: "SchoolListDetailViewController", bundle: nil)
+        let schoolListDetailViewController = storyboard.instantiateViewController(
+            withIdentifier: "SchoolsListDetailViewController")
+        var detailsViewModel = SchoolListDetailViewModel(dataMnager: SchoolsDataManager())
+        detailsViewModel.endClosure = { [weak self] action in
+            switch action {
+            case .exit:
+                self?.navigationController.popViewController(animated: true)
+            }
+        }
+        guard let schoolListDetailViewController = schoolListDetailViewController
+                as? SchoolListDetailViewController else {
+            fatalError("Unable to instantiate School Detail View Controller")
+        }
+        schoolListDetailViewController.schoolListDetailViewModel = detailsViewModel
+        // need School type for selected cell; maybe use closure to get School type
+        // schoolListDetailViewController.loadDetailView(T##school: SchoolModel##SchoolModel)
+        navigationController.pushViewController(schoolListDetailViewController, animated: true)
+    }
 }
+/* Tim: MVVM-C Example
+ func start() {
+     let viewModel = SchoolListExampleViewModel { [weak self] action in
+         switch action {
+         case .exit:
+             // de
+             break
+         case .details:
+             self?.coordinateToDetailsViewController()
+         }
+     }
+     let vc = SchoolListExampleViewController(nibName: nil, bundle: nil)
+     vc.viewModel = viewModel
+     let nav = UINavigationController(rootViewController: vc)
+ }
+
+ protocol SchoolListExampleViewModelProtocol {
+     func numberOfRowsInSection(in section: Int) -> Int
+     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell
+     func heightForRowAt(indexPath: IndexPath) -> CGFloat
+     func didSelectRowAt(indexPath: IndexPath)
+     func handleAction(action: SchoolListExampleViewModelAction)
+ }
+ enum SchoolListExampleViewModelAction {
+     case exit // for cancel button
+     case details
+ }
+
+ struct SchoolListExampleViewModel: SchoolListExampleViewModelProtocol {
+     var endClosure: ((SchoolListExampleViewModelAction) -> Void)?
+     func numberOfRowsInSection(in section: Int) -> Int {
+         <#code#>
+     }
+     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell {
+         <#code#>
+     }
+     func heightForRowAt(indexPath: IndexPath) -> CGFloat {f
+         <#code#>
+     }
+     func didSelectRowAt(indexPath: IndexPath) {
+     }
+     func handleAction(action: SchoolListExampleViewModelAction) {
+         endClosure?(action)
+     }
+ }
+*/

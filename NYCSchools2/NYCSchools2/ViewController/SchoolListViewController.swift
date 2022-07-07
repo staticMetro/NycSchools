@@ -8,12 +8,14 @@
 import UIKit
 import MapKit
 
-class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITableViewDataSource,
+class SchoolListViewController: UIViewController, UISearchResultsUpdating,
+                                UITableViewDataSource,
                                 UITableViewDelegate, SchoolListViewModelProtocol {
     @IBOutlet weak internal var tableView: UITableView!
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
     var schoolListViewModel: SchoolListViewModel?
+    var viewModel: SchoolListViewModelProtocol?
     var searchController = UISearchController(searchResultsController: nil)
     var searchFooterBottomConstraint: NSLayoutConstraint!
 
@@ -21,8 +23,13 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
         super.viewDidLoad()
         title = "NYC Schools"
         navigationController?.navigationBar.prefersLargeTitles = true
-        // activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         searchBarSetup()
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .gray
+    }
+    func handleAction(action: SchoolListViewModelAction) {
+        schoolListViewModel?.endClosure?(action)
     }
     func searchBarSetup() {
         searchController.searchResultsUpdater = self
@@ -31,6 +38,8 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+        searchController.searchBar.scopeButtonTitles = ["All", "Brooklyn",
+                                                        "Manhattan", "Queens", "Bronx", "Staten Island"]
     }
 
     // Function to throw alert.
@@ -38,16 +47,114 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating, UITab
             print("Error while fetching Schools.")
             print(error.localizedDescription)
     }
+}
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let school = sender as? SchoolModel,
-        let detailsView = segue.destination as? SchoolListDetailViewController else {
-            return
-        }
-        detailsView.view.tag = 0
-        detailsView.loadDetailView(school)
+extension SchoolListViewController {
+    func exit() {
+        viewModel?.handleAction(action: .exit)
+    }
+    func goToDetails() {
+        viewModel?.handleAction(action: .details)
     }
 }
+extension SchoolListViewController {
+    func handleKeyboard(notification: Notification) {
+        guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {
+            searchFooterBottomConstraint.constant = 0
+            view.layoutIfNeeded()
+            return
+        }
+        guard let info = notification.userInfo,
+              let keyboardFrame = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardHeight = keyboardFrame.cgRectValue.size.height
+        UIView.animate(withDuration: 0.1) {
+            self.searchFooterBottomConstraint.constant = keyboardHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+    // Modify search functions for scope
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text ?? "")
+    }
+    func filterContentForSearchText(_ searchText: String) {
+        schoolListViewModel?.filteredSchools = (schoolListViewModel?.schools.filter({( school: SchoolModel) -> Bool in
+            return school.schoolName?.lowercased().contains(searchText.lowercased()) ?? false
+        }))!
+        tableView.reloadData()
+    }
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text ?? "")
+    }
+}
+extension SchoolListViewController {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if schoolListViewModel?.isFiltering(searchController) != false {
+            return schoolListViewModel?.filteredSchools.count ?? 0
+        }
+        return schoolListViewModel?.numberOfRows(inSection: section) ?? 0
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // swiftlint:disable force_cast
+        let cell = tableView.dequeueReusableCell(withIdentifier: SchoolTableViewCell.identifier) as! SchoolTableViewCell
+        // swiftlint:enable force_cast
+        if schoolListViewModel?.isFiltering(searchController) != false {
+            cell.school = schoolListViewModel?.filteredSchools[indexPath.row]
+        } else {
+            cell.school = schoolListViewModel?.data(forRowAt: indexPath)
+        }
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+        return cell
+    }
+    func tableView(_ tableView: UITableView,
+                   heightForRowAt indexPath: IndexPath) -> CGFloat {return 64}
+}
+
+extension SchoolListViewController {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // let school: SchoolModel?
+        if schoolListViewModel?.isFiltering(searchController) != false {
+            // school = schoolListViewModel?.filteredSchools[indexPath.row]
+        } else {
+            // school = schoolListViewModel?.data(forRowAt: indexPath)
+        }
+        schoolListViewModel?.handleAction(action: .details)
+        // coordinateToSchoolDetails()
+
+        // Need to pass data of school to SchoolListDetailViewController type and call loadView(SchoolModel)
+
+//        let storyboard = UIStoryboard(name: "SchoolListDetailViewController", bundle: nil)
+//        let schoolListDetailViewController = storyboard.instantiateViewController(
+//            withIdentifier: "SchoolListDetailViewController")
+//        let viewModel = SchoolListDetailViewModel()
+//        guard let schoolListDetailViewController = schoolListDetailViewController
+//                as? SchoolListDetailViewController else {
+//            fatalError("Unable to instantiate School Detail View Controller")
+//        }
+//        schoolListDetailViewController.schoolListDetailViewModel = viewModel
+//        // Use schoolClosure to capture selected school
+//        guard let selectedSchool = schoolListDetailViewController.schoolClosure?(.details) ?? school else { return }
+//        schoolListDetailViewController.loadDetailView(selectedSchool)
+//        print(selectedSchool)
+//        navigationController?.pushViewController(schoolListDetailViewController, animated: true)
+    }
+}
+
+extension SchoolListViewController {
+    func fetchSchoolListSuccess(_ failedError: Error?) {
+        if let error = failedError {displayAlert(error)} else {
+            DispatchQueue.main.async { [self] in
+                tableView.reloadData()
+                activityIndicator.stopAnimating()
+                activityIndicator.hidesWhenStopped = true
+                activityView.isHidden = true
+            }
+        }
+    }
+    func fetchSATSuccess(_ failedError: Error?) {if let error = failedError {self.displayAlert(error)}}
+}
+
 /* Tim: MVVM-C Example
  protocol SchoolListExampleViewModelProtocol {
      func numberOfRowsInSection(in section: Int) -> Int

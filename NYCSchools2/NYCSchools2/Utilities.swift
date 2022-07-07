@@ -10,15 +10,15 @@ import UIKit
 import MapKit
 
 class Utilities {
-    static func setLocation(_ location: String?, _ mapView: MKMapView!) {
+    static func setLocation(_ location: String?, _ mapView: MKMapView?) {
         let schoolAnnotation = MKPointAnnotation()
         if let schoolCoordinate = fetchCoordinates(location) {
             schoolAnnotation.coordinate = schoolCoordinate
-            mapView.addAnnotation(schoolAnnotation)
+            mapView?.addAnnotation(schoolAnnotation)
             let span = MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
             let region = MKCoordinateRegion(center: schoolAnnotation.coordinate, span: span)
-            let adjustRegion = mapView.regionThatFits(region)
-            mapView.setRegion(adjustRegion, animated: true)
+            guard let adjustRegion = mapView?.regionThatFits(region) else { return }
+            mapView?.setRegion(adjustRegion, animated: true)
         }
     }
 

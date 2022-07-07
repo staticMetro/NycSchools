@@ -90,8 +90,6 @@
 				3134D2602858D86900AA8E40 /* ViewController */,
 				3134D25D2858D86900AA8E40 /* ViewModel */,
 				31E78A7E286DE99A0094A205 /* Coordinator */,
-				31E78A88286E42600094A205 /* SchoolListDetailViewController.storyboard */,
-				31E78A86286E41CE0094A205 /* SchoolListViewController.storyboard */,
 			);
 			path = NYCSchools2;
 			sourceTree = "<group>";
@@ -110,6 +108,8 @@
 			children = (
 				3134D2612858D86900AA8E40 /* SchoolListViewController.swift */,
 				3134D2722858EC6D00AA8E40 /* SchoolListDetailViewController.swift */,
+				31E78A88286E42600094A205 /* SchoolListDetailViewController.storyboard */,
+				31E78A86286E41CE0094A205 /* SchoolListViewController.storyboard */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";

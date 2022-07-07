@@ -11,8 +11,23 @@ import MapKit
 
 protocol SchoolListDetailViewModelProtocol {
     func loadDetailView(_ school: SchoolModel)
+    func handleAction(action: SchoolListDetailViewAction)
 }
 
-struct SchoolListDetailViewModel {
+enum SchoolListDetailViewAction {
+    case exit
+}
 
+struct SchoolListDetailViewModel: SchoolListDetailViewModelProtocol {
+    var endClosure: ((SchoolListDetailViewAction) -> Void)?
+
+    var dataMnager: SchoolsDataManager
+
+    func loadDetailView(_ school: SchoolModel) {
+        // ..
+    }
+
+    func handleAction(action: SchoolListDetailViewAction) {
+        endClosure?(action)
+    }
 }

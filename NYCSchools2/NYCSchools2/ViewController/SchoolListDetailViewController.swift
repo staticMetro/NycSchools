@@ -10,43 +10,51 @@ import UIKit
 import MapKit
 
 class SchoolListDetailViewController: UIViewController {
-    @IBOutlet weak private var schoolNameLabel: UILabel!
-    @IBOutlet weak private var readingSATScoreLabel: UILabel!
-    @IBOutlet weak private var mathSATScoreLabel: UILabel!
-    @IBOutlet weak private var writingLabel: UILabel!
-    @IBOutlet weak private var addressLineLabel: UILabel!
-    @IBOutlet weak private var cityLabel: UILabel!
-    @IBOutlet weak private var websiteLabel: UILabel!
-    @IBOutlet weak private var phoneNumberLabel: UILabel!
-    @IBOutlet weak private var emailLabel: UILabel!
-    @IBOutlet weak private var faxNumberLabel: UILabel!
-    @IBOutlet weak private var mapView: MKMapView!
-    private var schoolListDetailViewModel = SchoolListDetailViewModel()
+
+    @IBOutlet weak private var schoolNameLabel: UILabel?
+    @IBOutlet weak private var readingSATScoreLabel: UILabel?
+    @IBOutlet weak private var mathSATScoreLabel: UILabel?
+    @IBOutlet weak private var writingLabel: UILabel?
+    @IBOutlet weak private var addressLineLabel: UILabel?
+    @IBOutlet weak private var cityLabel: UILabel?
+    @IBOutlet weak private var websiteLabel: UILabel?
+    @IBOutlet weak private var phoneNumberLabel: UILabel?
+    @IBOutlet weak private var emailLabel: UILabel?
+    @IBOutlet weak private var faxNumberLabel: UILabel?
+    @IBOutlet weak private var mapView: MKMapView?
+    var schoolListDetailViewModel: SchoolListDetailViewModelProtocol?
+    var schoolClosure: ((SchoolListViewModelAction) -> SchoolModel)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close,
+                                                           target: self, action: #selector(didSelectBackButton))
     }
-}
-extension SchoolListDetailViewController: SchoolListDetailViewModelProtocol {
-    func loadDetailView(_ school: SchoolModel) {
-        schoolNameLabel.text = school.schoolName
-        if let readingScore = school.satScores?.satReadingScore {
-            readingSATScoreLabel.text = "SAT Average Reading Score - " + readingScore
+
+    @objc func didSelectBackButton() {
+        schoolListDetailViewModel?.handleAction(action: .exit)
+    }
+
+    // func loadDetailView(_ school: SchoolModel) {
+    func loadDetailView(_ schoolClosure: SchoolModel) {
+        schoolNameLabel?.text = schoolClosure.schoolName
+        if let readingScore = schoolClosure.satScores?.satReadingScore {
+            readingSATScoreLabel?.text = "SAT Average Reading Score - " + readingScore
         }
-        if let writingScore = school.satScores?.satWritingScore {
-            writingLabel.text = "SAT Average Writing Score - " + writingScore
+        if let writingScore = schoolClosure.satScores?.satWritingScore {
+            writingLabel?.text = "SAT Average Writing Score - " + writingScore
         }
-        if let mathsScore = school.satScores?.satMathScore {
-            mathSATScoreLabel.text = "SAT Average Maths Score - " + mathsScore
+        if let mathsScore = schoolClosure.satScores?.satMathScore {
+            mathSATScoreLabel?.text = "SAT Average Maths Score - " + mathsScore
         }
-        if let city = school.city, let code = school.stateCode, let zip = school.zip {
-            cityLabel.text = "\(city), \(code), \(zip)"
+        if let city = schoolClosure.city, let code = schoolClosure.stateCode, let zip = schoolClosure.zip {
+            cityLabel?.text = "\(city), \(code), \(zip)"
         }
-        addressLineLabel.text = school.primaryAddress
-        websiteLabel.text = school.website
-        phoneNumberLabel.text = (school.phoneNumber)!
-        emailLabel.text = school.schoolEmail
-        faxNumberLabel.text = school.faxNumber
-        Utilities.setLocation(school.location, mapView)
+        addressLineLabel?.text = schoolClosure.primaryAddress
+        websiteLabel?.text = schoolClosure.website
+        phoneNumberLabel?.text = (schoolClosure.phoneNumber)
+        emailLabel?.text = schoolClosure.schoolEmail
+        faxNumberLabel?.text = schoolClosure.faxNumber
+        Utilities.setLocation(schoolClosure.location, mapView)
     }
 }
