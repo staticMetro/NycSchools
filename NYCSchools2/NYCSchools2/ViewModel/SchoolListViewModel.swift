@@ -46,7 +46,7 @@ protocol SchoolListViewModelProtocol: AnyObject {
 
 enum SchoolListViewModelAction {
     case exit // for cancel button
-    case details // for school details
+    case details(SchoolModel) // for school details
 }
 
 class SchoolListViewModel {
@@ -147,17 +147,17 @@ class SchoolListViewModel {
             print("Error while fetching Schools.")
             print(error.localizedDescription)
     }
-    /*
-    func fetchSchoolListSuccess(_ failedError: Error?) {
+    func fetchSchoolListSuccess(_ failedError: Error?, _ activityIndicator: UIActivityIndicatorView,
+                                _ activityView: UIView, _ tableView: UITableView) {
         if let error = failedError {displayAlert(error)} else {
-            DispatchQueue.main.async { [self] in
-                // tableView.reloadData()
-                // activityIndicator.stopAnimating()
-                // activityIndicator.hidesWhenStopped = true
-                // activityView.isHidden = true
+            DispatchQueue.main.async {
+                tableView.reloadData()
+                activityIndicator.stopAnimating()
+                activityIndicator.hidesWhenStopped = true
+                activityView.isHidden = true
             }
         }
     }
     func fetchSATSuccess(_ failedError: Error?) {if let error = failedError {self.displayAlert(error)}}
-     */
+
 }

@@ -32,33 +32,28 @@ class SchoolsCoordinator: Coordinator {
         viewModel.endClosure = { [weak self] action in
             switch action {
             case .exit:
-                // de
                 break
-            case .details:
-                self?.coordinateToSchoolDetails()
+            case .details(let model):
+                self?.coordinateToSchoolDetails(model)
             }
         }
         schoolsListViewController.schoolListViewModel = viewModel
         navigationController.viewControllers = [schoolsListViewController]
     }
-    func coordinateToSchoolDetails() {
+    func coordinateToSchoolDetails(_ schoolModel: SchoolModel) {
         let storyboard = UIStoryboard(name: "SchoolListDetailViewController", bundle: nil)
-        let schoolListDetailViewController = storyboard.instantiateViewController(
-            withIdentifier: "SchoolsListDetailViewController")
-        var detailsViewModel = SchoolListDetailViewModel(dataMnager: SchoolsDataManager())
+        guard let schoolListDetailViewController = storyboard.instantiateViewController(
+            withIdentifier: "SchoolListDetailViewController") as? SchoolListDetailViewController else {
+            fatalError("Unable to instantiate School Detail View Controller")
+        }
+        var detailsViewModel = SchoolListDetailViewModel(schoolModel: schoolModel, dataMnager: SchoolsDataManager())
         detailsViewModel.endClosure = { [weak self] action in
             switch action {
             case .exit:
                 self?.navigationController.popViewController(animated: true)
             }
         }
-        guard let schoolListDetailViewController = schoolListDetailViewController
-                as? SchoolListDetailViewController else {
-            fatalError("Unable to instantiate School Detail View Controller")
-        }
-        schoolListDetailViewController.schoolListDetailViewModel = detailsViewModel
-        // need School type for selected cell; maybe use closure to get School type
-        // schoolListDetailViewController.loadDetailView(T##school: SchoolModel##SchoolModel)
+        schoolListDetailViewController.viewModel = detailsViewModel
         navigationController.pushViewController(schoolListDetailViewController, animated: true)
     }
 }

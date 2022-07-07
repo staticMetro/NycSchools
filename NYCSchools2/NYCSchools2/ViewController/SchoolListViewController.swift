@@ -8,9 +8,8 @@
 import UIKit
 import MapKit
 
-class SchoolListViewController: UIViewController, UISearchResultsUpdating,
-                                UITableViewDataSource,
-                                UITableViewDelegate, SchoolListViewModelProtocol {
+class SchoolListViewController: UIViewController, SchoolListViewModelProtocol {
+
     @IBOutlet weak internal var tableView: UITableView!
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
@@ -50,14 +49,10 @@ class SchoolListViewController: UIViewController, UISearchResultsUpdating,
 }
 
 extension SchoolListViewController {
-    func exit() {
-        viewModel?.handleAction(action: .exit)
-    }
-    func goToDetails() {
-        viewModel?.handleAction(action: .details)
-    }
+    // func exit() {viewModel?.handleAction(action: .exit)}
+    // func goToDetails() {viewModel?.handleAction(action: .details)}
 }
-extension SchoolListViewController {
+extension SchoolListViewController: UISearchResultsUpdating {
     func handleKeyboard(notification: Notification) {
         guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {
             searchFooterBottomConstraint.constant = 0
@@ -87,7 +82,7 @@ extension SchoolListViewController {
         filterContentForSearchText(searchBar.text ?? "")
     }
 }
-extension SchoolListViewController {
+extension SchoolListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if schoolListViewModel?.isFiltering(searchController) != false {
             return schoolListViewModel?.filteredSchools.count ?? 0
@@ -111,33 +106,16 @@ extension SchoolListViewController {
                    heightForRowAt indexPath: IndexPath) -> CGFloat {return 64}
 }
 
-extension SchoolListViewController {
+extension SchoolListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // let school: SchoolModel?
+        let school: SchoolModel?
         if schoolListViewModel?.isFiltering(searchController) != false {
-            // school = schoolListViewModel?.filteredSchools[indexPath.row]
+            school = schoolListViewModel?.filteredSchools[indexPath.row]
         } else {
-            // school = schoolListViewModel?.data(forRowAt: indexPath)
+            school = schoolListViewModel?.data(forRowAt: indexPath)
         }
-        schoolListViewModel?.handleAction(action: .details)
-        // coordinateToSchoolDetails()
-
-        // Need to pass data of school to SchoolListDetailViewController type and call loadView(SchoolModel)
-
-//        let storyboard = UIStoryboard(name: "SchoolListDetailViewController", bundle: nil)
-//        let schoolListDetailViewController = storyboard.instantiateViewController(
-//            withIdentifier: "SchoolListDetailViewController")
-//        let viewModel = SchoolListDetailViewModel()
-//        guard let schoolListDetailViewController = schoolListDetailViewController
-//                as? SchoolListDetailViewController else {
-//            fatalError("Unable to instantiate School Detail View Controller")
-//        }
-//        schoolListDetailViewController.schoolListDetailViewModel = viewModel
-//        // Use schoolClosure to capture selected school
-//        guard let selectedSchool = schoolListDetailViewController.schoolClosure?(.details) ?? school else { return }
-//        schoolListDetailViewController.loadDetailView(selectedSchool)
-//        print(selectedSchool)
-//        navigationController?.pushViewController(schoolListDetailViewController, animated: true)
+        guard let model = school else { return }
+        schoolListViewModel?.handleAction(action: .details(model))
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     // private let schoolsCoordinator = SchoolsCoordinator()
+    var schoolsCoordinator: SchoolsCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -20,12 +21,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let rootNavigationController = UINavigationController()
-        let schoolsCoordinator = SchoolsCoordinator(navigationController: rootNavigationController)
+        schoolsCoordinator = SchoolsCoordinator(navigationController: rootNavigationController)
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = rootNavigationController
         window?.makeKeyAndVisible()
 
-        schoolsCoordinator.start()
+        schoolsCoordinator?.start()
     }
 }

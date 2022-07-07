@@ -11,7 +11,7 @@ import MapKit
 
 class SchoolListDetailViewController: UIViewController {
 
-    @IBOutlet weak private var schoolNameLabel: UILabel?
+    @IBOutlet weak var schoolNameLabel: UILabel?
     @IBOutlet weak private var readingSATScoreLabel: UILabel?
     @IBOutlet weak private var mathSATScoreLabel: UILabel?
     @IBOutlet weak private var writingLabel: UILabel?
@@ -22,8 +22,7 @@ class SchoolListDetailViewController: UIViewController {
     @IBOutlet weak private var emailLabel: UILabel?
     @IBOutlet weak private var faxNumberLabel: UILabel?
     @IBOutlet weak private var mapView: MKMapView?
-    var schoolListDetailViewModel: SchoolListDetailViewModelProtocol?
-    var schoolClosure: ((SchoolListViewModelAction) -> SchoolModel)?
+    var viewModel: SchoolListDetailViewModelProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,29 +31,26 @@ class SchoolListDetailViewController: UIViewController {
     }
 
     @objc func didSelectBackButton() {
-        schoolListDetailViewModel?.handleAction(action: .exit)
+        viewModel?.handleAction(action: .exit)
     }
 
-    // func loadDetailView(_ school: SchoolModel) {
-    func loadDetailView(_ schoolClosure: SchoolModel) {
-        schoolNameLabel?.text = schoolClosure.schoolName
-        if let readingScore = schoolClosure.satScores?.satReadingScore {
-            readingSATScoreLabel?.text = "SAT Average Reading Score - " + readingScore
-        }
-        if let writingScore = schoolClosure.satScores?.satWritingScore {
-            writingLabel?.text = "SAT Average Writing Score - " + writingScore
-        }
-        if let mathsScore = schoolClosure.satScores?.satMathScore {
-            mathSATScoreLabel?.text = "SAT Average Maths Score - " + mathsScore
-        }
-        if let city = schoolClosure.city, let code = schoolClosure.stateCode, let zip = schoolClosure.zip {
+    func loadDetailView(_ school: SchoolModel) {
+        guard let configuration = viewModel?.getConfiguration() else { return }
+        schoolNameLabel?.text = configuration.schoolName
+        readingSATScoreLabel?.text = "SAT Average Reading Score - " + (configuration.satReadingScore ?? "error")
+        writingLabel?.text = "SAT Average Writing Score - " + (configuration.satWritingScore ?? "error")
+        mathSATScoreLabel?.text = "SAT Average Maths Score - " + (configuration.satMathScore ?? "error")
+
+        if let city = configuration.city,
+            let code = configuration.stateCode,
+            let zip = configuration.zip {
             cityLabel?.text = "\(city), \(code), \(zip)"
         }
-        addressLineLabel?.text = schoolClosure.primaryAddress
-        websiteLabel?.text = schoolClosure.website
-        phoneNumberLabel?.text = (schoolClosure.phoneNumber)
-        emailLabel?.text = schoolClosure.schoolEmail
-        faxNumberLabel?.text = schoolClosure.faxNumber
-        Utilities.setLocation(schoolClosure.location, mapView)
+        addressLineLabel?.text = configuration.primaryAddress
+        websiteLabel?.text = configuration.website
+        phoneNumberLabel?.text = configuration.phoneNumber
+        emailLabel?.text = configuration.schoolEmail
+        faxNumberLabel?.text = configuration.faxNumber
+        Utilities.setLocation(configuration.location, mapView)
     }
 }

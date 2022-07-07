@@ -216,7 +216,7 @@
                         <outlet property="mathSATScoreLabel" destination="Kt8-Re-zWW" id="hxK-MY-Y6N"/>
                         <outlet property="phoneNumberLabel" destination="xhr-Eg-gq4" id="knO-Af-ejL"/>
                         <outlet property="readingSATScoreLabel" destination="dBh-1q-jPu" id="RVn-yU-43q"/>
-                        <outlet property="schoolNameLabel" destination="noo-WY-EH1" id="lmU-me-E7S"/>
+                        <outlet property="schoolNameLabel" destination="noo-WY-EH1" id="vTc-UG-UcS"/>
                         <outlet property="websiteLabel" destination="WvM-tO-Q2w" id="bDf-XF-IAV"/>
                         <outlet property="writingLabel" destination="gFr-Dk-WSF" id="XuA-lv-Y3M"/>
                     </connections>
