@@ -54,7 +54,9 @@ class SchoolsCoordinator: Coordinator {
             }
         }
         schoolListDetailViewController.viewModel = detailsViewModel
+        // schoolListDetailViewController.loadDetailView(schoolModel)
         navigationController.pushViewController(schoolListDetailViewController, animated: true)
+        // schoolListDetailViewController.schoolNameLabel?.text = schoolModel.schoolName
     }
 }
 /* Tim: MVVM-C Example

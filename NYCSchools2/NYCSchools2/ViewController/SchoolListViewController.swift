@@ -14,7 +14,7 @@ class SchoolListViewController: UIViewController, SchoolListViewModelProtocol {
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak internal var activityIndicator: UIActivityIndicatorView!
     var schoolListViewModel: SchoolListViewModel?
-    var viewModel: SchoolListViewModelProtocol?
+    // var viewModel: SchoolListViewModelProtocol?
     var searchController = UISearchController(searchResultsController: nil)
     var searchFooterBottomConstraint: NSLayoutConstraint!
 
@@ -48,10 +48,6 @@ class SchoolListViewController: UIViewController, SchoolListViewModelProtocol {
     }
 }
 
-extension SchoolListViewController {
-    // func exit() {viewModel?.handleAction(action: .exit)}
-    // func goToDetails() {viewModel?.handleAction(action: .details)}
-}
 extension SchoolListViewController: UISearchResultsUpdating {
     func handleKeyboard(notification: Notification) {
         guard notification.name == UIResponder.keyboardWillChangeFrameNotification else {

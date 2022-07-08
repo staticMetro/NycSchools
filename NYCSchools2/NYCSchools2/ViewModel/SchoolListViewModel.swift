@@ -128,13 +128,11 @@ class SchoolListViewModel {
         }
         // for loop that adds remaining schools that do not have sat scores to list
         // & provides explanation: "No score avialable. Please contact the school for more info"
-        /*
-        for school in previous {
-            if (previous.contains(where: (SchoolModel) throws -> Bool)) {
-                self.schools.append(school)
+        for schoolMissing in previous {
+            if !schools.contains(where: { $0.schoolName == schoolMissing.schoolName }) {
+                schools.append(schoolMissing)
             }
         }
-         */
     }
     func isFiltering(_ searchController: UISearchController) -> Bool {
         return searchController.isActive && !searchBarIsEmpty(searchController)

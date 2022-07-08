@@ -20,7 +20,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "732835F0-EF4D-4143-8B5E-D851559AE8C3 - ee2e4743d40cbdf3"
+                  uuid = "732835F0-EF4D-4143-8B5E-D851559AE8C3 - ee2e4743d40cbf7f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -30,12 +30,12 @@
                   urlString = "file:///Users/o777153/Documents/projects/supreme-waddle/NYCSchools2/NYCSchools2/SchoolsCoordinator.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "44"
-                  endingLineNumber = "44"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
                   offsetFromSymbolStart = "472">
                </Location>
                <Location
-                  uuid = "732835F0-EF4D-4143-8B5E-D851559AE8C3 - e7c9ac38e1549405"
+                  uuid = "732835F0-EF4D-4143-8B5E-D851559AE8C3 - e7c9ac38e1549689"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -45,8 +45,8 @@
                   urlString = "file:///Users/o777153/Documents/projects/supreme-waddle/NYCSchools2/NYCSchools2/SchoolsCoordinator.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "44"
-                  endingLineNumber = "44"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
                   offsetFromSymbolStart = "32">
                </Location>
             </Locations>
@@ -78,8 +78,8 @@
             filePath = "NYCSchools2/ViewController/SchoolListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "NYCSchools2/ViewController/SchoolListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -129,6 +129,22 @@
             startingLineNumber = "37"
             endingLineNumber = "37"
             landmarkName = "coordinateToSchoolsList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C7F3C9FD-C377-43BE-9F41-93C34F4D86DD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NYCSchools2/SchoolsCoordinator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "coordinateToSchoolDetails(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
