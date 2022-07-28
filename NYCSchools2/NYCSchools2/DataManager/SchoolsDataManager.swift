@@ -6,47 +6,57 @@
 //
 
 import Foundation
-/*
- API KEY: 980qm08vatbpyidd7felxnrm4
- API KEY Secret: 3ffdzjx9szr9wzmu0aocghmtpy76fas11odritrdih3y8f7emz
- APP Token: ke4ouJojh6vYDs9HeqQHur8oq
- App Secret token: u8kXhwZ2OjOFSqUTRDcQMnkNUGyY22FJxtAY
-*/
-struct APIURLS {
-    static let fetchSchoolsLink = "https://data.cityofnewyork.us/resource/s3k6-pzi2.json"
-    static let fetchSATScoresLink = "https://data.cityofnewyork.us/resource/f9bf-2cp4.json"
+
+enum SchoolsDataManagingResponseStatus<T> {
+    case initial
+    case loading
+    case failed(NSError)
+    case success(T)
 }
 
-class SchoolsDataManager {
-    func fetchData(urlString: String, completionHandler: @escaping (Any?, Error?) -> Void) {
-        guard let urlLink = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-        else {
-            return
+protocol SchoolsDataManaging {
+    func fetchSchools(completion: @escaping (SchoolsDataManagingResponseStatus<[SchoolModel]>) -> Void)
+    func fetchSAT(completion: @escaping (SchoolsDataManagingResponseStatus<[SATScoreModel]>) -> Void)
+}
+
+struct SchoolsDataManager: SchoolsDataManaging {
+
+    private struct Constant {
+        struct URL {
+            static let schoolsURLString = "https://data.cityofnewyork.us/resource/s3k6-pzi2.json"
+            static let satScoreURLString = "https://data.cityofnewyork.us/resource/f9bf-2cp4.json"
         }
+    }
+
+    func fetchSchools(completion: @escaping (SchoolsDataManagingResponseStatus<[SchoolModel]>) -> Void) {
+        fetchData(urlString: Constant.URL.schoolsURLString, modelType: SchoolModel.self, completion: { completion($0) })
+    }
+
+    func fetchSAT(completion: @escaping (SchoolsDataManagingResponseStatus<[SATScoreModel]>) -> Void) {
+        fetchData(urlString: Constant.URL.satScoreURLString, modelType: SATScoreModel.self, completion: { completion($0) })
+    }
+
+    private func fetchData<T: Decodable>(urlString: String, modelType: T.Type, completion: @escaping (SchoolsDataManagingResponseStatus<[T]>) -> Void) {
+
+        guard let urlLink = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) else { return }
+
         guard let url = URL(string: urlLink) else {
-            print("Error: cannot create URL")
-            completionHandler([], nil)
+            completion(.failed(NSError(domain: "Error: cannot create URL", code: 10001)))
             return
         }
-        let task = URLSession.shared.dataTask(with: url) { (responseData, response, error) in
-            if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 403 {
-                    print("Error: Access Denied.")
-                    completionHandler([], error)
-                }
-            }
-            if error != nil {
-                print("Error: Received Error.")
-                completionHandler([], error)
+
+        URLSession.shared.dataTask(with: url, completionHandler: {(responseData, response, error) in
+            guard let rawData = responseData else {
+                completion(.failed(NSError(domain: "Error: Something went wrong, please try it again later", code: 10002)))
                 return
             }
-            guard responseData != nil else {
-                print("Error: did not receive data")
-                completionHandler([], error)
-                return
+
+            do {
+                let data = try JSONDecoder().decode([T].self, from: rawData)
+                completion(.success(data))
+            } catch let error {
+                completion(.failed(NSError(domain: "Error: Something went wrong, please try it again later. Message: \(error.localizedDescription)", code: 10002)))
             }
-            completionHandler(responseData, error)
-        }
-        task.resume()
+        }).resume()
     }
 }

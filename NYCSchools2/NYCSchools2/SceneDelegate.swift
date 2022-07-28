@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let rootNavigationController = UINavigationController()
-        schoolsCoordinator = SchoolsCoordinator(navigationController: rootNavigationController)
+        schoolsCoordinator = SchoolsCoordinator(navigationController: rootNavigationController, dataManager: SchoolsDataManager())
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = rootNavigationController

@@ -11,24 +11,65 @@ import UIKit
 protocol Coordinator {
     func start()
 }
+
 class SchoolsCoordinator: Coordinator {
     private let navigationController: UINavigationController
-    var schoolsDataManager = SchoolsDataManager()
+    private let dataManager: SchoolsDataManaging
+    private var schoolListModel: [SchoolModel] = []
+    private var satListModel: [SATScoreModel] = []
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, dataManager: SchoolsDataManaging) {
         self.navigationController = navigationController
+        self.dataManager = dataManager
     }
 
     func start() {
-        coordinateToSchoolsList()
-    }
-    func coordinateToSchoolsList() {
-        let storyboard = UIStoryboard(name: "SchoolListViewController", bundle: nil)
-        guard let schoolsListViewController = storyboard.instantiateViewController(
-            withIdentifier: "SchoolsListViewController") as? SchoolListViewController else {
-            fatalError("Unable to instantiate School List View Controller")
+        let result = fetchData()
+        switch result {
+        case .success:
+            coordinateToSchoolsList()
+        case .timedOut:
+            debugPrint("Time Out...")
         }
-        let viewModel = SchoolListViewModel(dataManager: SchoolsDataManager())
+    }
+
+    func fetchData() -> DispatchTimeoutResult {
+        let group = DispatchGroup()
+
+        group.enter()
+        dataManager.fetchSchools { [weak self] status in
+            switch status {
+            case .initial, .loading:
+                break
+            case .success(let schoolModel):
+                group.leave()
+                self?.schoolListModel = schoolModel
+            case .failed(_):
+                group.leave()
+                break
+            }
+        }
+
+        group.enter()
+        dataManager.fetchSAT { [weak self] status in
+            switch status {
+            case .initial, .loading:
+                break
+            case .success(let satModel):
+                group.leave()
+                self?.satListModel = satModel
+            case .failed(_):
+                group.leave()
+                break
+            }
+        }
+
+        return group.wait(timeout: DispatchTime.now() + 10)
+    }
+
+    func coordinateToSchoolsList() {
+        let viewController = SchoolListViewController(schoolsCellProvider: SchoolsCellProvider())
+        let viewModel = SchoolListViewModel(schools: schoolListModel, satModel: satListModel)
         viewModel.endClosure = { [weak self] action in
             switch action {
             case .exit:
@@ -37,9 +78,10 @@ class SchoolsCoordinator: Coordinator {
                 self?.coordinateToSchoolDetails(model)
             }
         }
-        schoolsListViewController.schoolListViewModel = viewModel
-        navigationController.viewControllers = [schoolsListViewController]
+        viewController.viewModel = viewModel
+        navigationController.viewControllers = [viewController]
     }
+
     func coordinateToSchoolDetails(_ schoolModel: SchoolModel) {
         let storyboard = UIStoryboard(name: "SchoolListDetailViewController", bundle: nil)
         guard let schoolListDetailViewController = storyboard.instantiateViewController(
@@ -54,54 +96,6 @@ class SchoolsCoordinator: Coordinator {
             }
         }
         schoolListDetailViewController.viewModel = detailsViewModel
-        // schoolListDetailViewController.loadDetailView(schoolModel)
         navigationController.pushViewController(schoolListDetailViewController, animated: true)
-        // schoolListDetailViewController.schoolNameLabel?.text = schoolModel.schoolName
     }
 }
-/* Tim: MVVM-C Example
- func start() {
-     let viewModel = SchoolListExampleViewModel { [weak self] action in
-         switch action {
-         case .exit:
-             // de
-             break
-         case .details:
-             self?.coordinateToDetailsViewController()
-         }
-     }
-     let vc = SchoolListExampleViewController(nibName: nil, bundle: nil)
-     vc.viewModel = viewModel
-     let nav = UINavigationController(rootViewController: vc)
- }
-
- protocol SchoolListExampleViewModelProtocol {
-     func numberOfRowsInSection(in section: Int) -> Int
-     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell
-     func heightForRowAt(indexPath: IndexPath) -> CGFloat
-     func didSelectRowAt(indexPath: IndexPath)
-     func handleAction(action: SchoolListExampleViewModelAction)
- }
- enum SchoolListExampleViewModelAction {
-     case exit // for cancel button
-     case details
- }
-
- struct SchoolListExampleViewModel: SchoolListExampleViewModelProtocol {
-     var endClosure: ((SchoolListExampleViewModelAction) -> Void)?
-     func numberOfRowsInSection(in section: Int) -> Int {
-         <#code#>
-     }
-     func cellForRowAt(indexPath: IndexPath) -> UITableViewCell {
-         <#code#>
-     }
-     func heightForRowAt(indexPath: IndexPath) -> CGFloat {f
-         <#code#>
-     }
-     func didSelectRowAt(indexPath: IndexPath) {
-     }
-     func handleAction(action: SchoolListExampleViewModelAction) {
-         endClosure?(action)
-     }
- }
-*/
