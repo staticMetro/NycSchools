@@ -47,17 +47,24 @@ class SchoolListViewController: UIViewController, UISearchControllerDelegate, UI
         viewModel?.updateSchoolList()
         tableView.reloadData()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.edgesForExtendedLayout = []
+    }
+
+    //TODO: Create a container view to assign to tableheader View, assign searchBar to containerView, refer to chatGPT convo
 
     func setupUI() {
+        navigationItem.titleView = searchController.searchBar
+        navigationItem.hidesSearchBarWhenScrolling = false
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search school name..."
         searchController.searchBar.scopeButtonTitles = ["All", "Brooklyn", "Manhattan",
                                                         "Queens", "Bronx", "Staten Is"]
-        navigationItem.hidesSearchBarWhenScrolling = true
+        searchController.hidesNavigationBarDuringPresentation = true
         definesPresentationContext = true
         searchController.searchBar.isTranslucent = false
-        navigationItem.titleView = tableView.tableHeaderView
         searchController.delegate = self
         searchController.searchBar.delegate = self
         tableView.tableHeaderView = searchController.searchBar
@@ -69,9 +76,10 @@ class SchoolListViewController: UIViewController, UISearchControllerDelegate, UI
             return
         }
         view.addSubview(tableView)
+//        searchBar.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         configureConstraints()
-        tableViewHeader.contentMode = .center
+//        tableViewHeader.contentMode = .center
     }
     
     func configureConstraints() {
@@ -81,6 +89,11 @@ class SchoolListViewController: UIViewController, UISearchControllerDelegate, UI
         }
         
         NSLayoutConstraint.activate([
+//            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            searchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+//            searchBar.heightAnchor.constraint(equalToConstant: 50),
+
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
