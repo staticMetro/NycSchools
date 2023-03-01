@@ -16,7 +16,7 @@ class MapViewController: UIViewController {
     private let schoolList: SchoolListViewController
     private let settingsButton = UIButton()
     var viewModel: MapViewModelProtocol?
-    private let scl: [SchoolModel] = []
+    private let school: [SchoolModel] = []
 
     init(schoolList: SchoolListViewController) {
         self.schoolList = schoolList
@@ -56,7 +56,7 @@ class MapViewController: UIViewController {
         super.viewDidAppear(animated)
         configureMap()
         drawCircle()
-        addSchoolAnnotations(schoolList.viewModel?.getSchools() ?? scl)
+        addSchoolAnnotations(schoolList.viewModel?.getSchools() ?? school)
     }
 
     @objc func buttonPressed(sender: UIButton) {

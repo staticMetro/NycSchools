@@ -57,20 +57,33 @@ class SchoolListViewController: UIViewController, UISearchControllerDelegate, UI
         navigationItem.hidesSearchBarWhenScrolling = true
         definesPresentationContext = true
         searchController.searchBar.isTranslucent = false
-        navigationItem.searchController = searchController
+        navigationItem.titleView = tableView.tableHeaderView
         searchController.delegate = self
         searchController.searchBar.delegate = self
-//        self.navigationController?.navigationBar.isTranslucent = false
-         tableView.tableHeaderView = searchController.searchBar
+        tableView.tableHeaderView = searchController.searchBar
     }
 
     func configureUI() {
+        let searchBar = searchController.searchBar
+        guard let tableViewHeader = tableView.tableHeaderView else {
+            return
+        }
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraints()
+        tableViewHeader.contentMode = .center
+    }
+    
+    func configureConstraints() {
+        let searchBar = searchController.searchBar
+        guard let tableViewHeader = tableView.tableHeaderView else {
+            return
+        }
+        
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
