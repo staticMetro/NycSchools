@@ -111,6 +111,7 @@ To get a local copy up and running follow these simple example steps.
 
 This is a list of things you need to use the software and how to install them.
 * ![XCode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
+* ![NYC DOE API Endpoint](https://data.cityofnewyork.us/resource/f9bf-2cp4.json)
 
 
 ### Installation
