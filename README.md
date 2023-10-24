@@ -1,4 +1,4 @@
-# supreme-waddle
+# NycSchools
 iOS Mobile App for NYC High Schools & their SAT Scores
 
 <!-- Improved compatibility of back-to-top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
@@ -38,7 +38,7 @@ iOS Mobile App for NYC High Schools & their SAT Scores
 
   </a>
 
-  <h3 align="center">Supreme Waddle</h3>
+  <h3 align="center">NycSchools</h3>
 
   <p align="center">
     SAT Scores for every nyc high school
