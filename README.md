@@ -132,6 +132,10 @@ _Below is an example of how you can instruct your audience on installing and set
 ## Usage
 
 <img src="https://github.com/staticMetro/NycSchools/blob/main/IMG_0007.PNG" alt="Logo" width="220" height="400">
+<img src="https://github.com/staticMetro/NycSchools/blob/main/IMG_0008.PNG" alt="Logo" width="220" height="400">
+<img src="https://github.com/staticMetro/NycSchools/blob/main/IMG_0009.PNG" alt="Logo" width="220" height="400">
+<img src="https://github.com/staticMetro/NycSchools/blob/main/IMG_00010.PNG" alt="Logo" width="220" height="400">
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
