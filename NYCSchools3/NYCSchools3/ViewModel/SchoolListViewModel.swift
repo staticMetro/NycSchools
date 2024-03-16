@@ -113,10 +113,8 @@ class SchoolListViewModel: SchoolListViewModelProtocol {
                 result.append(matchedSchool)
             }
         }
-        for schoolMissing in schools {
-            if !result.contains(where: { $0.schoolName == schoolMissing.schoolName }) {
+        for schoolMissing in schools where !result.contains(where: { $0.schoolName == schoolMissing.schoolName }) {
                 result.append(schoolMissing)
-            }
         }
         self.schools = result
     }

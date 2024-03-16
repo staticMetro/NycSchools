@@ -32,6 +32,7 @@
 		31BC78C82887097B00005BFE /* SchoolListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC78C72887097B00005BFE /* SchoolListViewController.swift */; };
 		31BC78CA2887099200005BFE /* SchoolListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC78C92887099200005BFE /* SchoolListDetailViewController.swift */; };
 		31BC78CF2887338100005BFE /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC78CE2887338100005BFE /* MapViewController.swift */; };
+		B21CA3162BA5F8F500DC38C1 /* GlassmorphicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21CA3152BA5F8F500DC38C1 /* GlassmorphicView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		31BC78C72887097B00005BFE /* SchoolListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListViewController.swift; sourceTree = "<group>"; };
 		31BC78C92887099200005BFE /* SchoolListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListDetailViewController.swift; sourceTree = "<group>"; };
 		31BC78CE2887338100005BFE /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B21CA3152BA5F8F500DC38C1 /* GlassmorphicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassmorphicView.swift; sourceTree = "<group>"; };
+		B2C595732AB5BC7A0060556C /* NYCSchools3Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = NYCSchools3Tests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +99,7 @@
 		315D2A81288EFF2D00644448 /* NYCSchools3Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B2C595732AB5BC7A0060556C /* NYCSchools3Tests.xctestplan */,
 				315D2A89288EFF7300644448 /* NYCSchools3Tests.swift */,
 			);
 			path = NYCSchools3Tests;
@@ -123,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				31BC78952885BCFD00005BFE /* AppDelegate.swift */,
+				B21CA3152BA5F8F500DC38C1 /* GlassmorphicView.swift */,
 				31BC78972885BCFD00005BFE /* SceneDelegate.swift */,
 				31BC78BA2886FB3900005BFE /* Models */,
 				31BC78BB2886FB8700005BFE /* View Controller */,
@@ -247,7 +252,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1340;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					315D2A7F288EFF2D00644448 = {
 						CreatedOnToolsVersion = 13.4;
@@ -300,7 +305,8 @@
 /* Begin PBXShellScriptBuildPhase section */
 		311324E8289C09D600B64D42 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -311,7 +317,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
@@ -348,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				31BC78C02886FCBB00005BFE /* SchoolListViewModel.swift in Sources */,
+				B21CA3162BA5F8F500DC38C1 /* GlassmorphicView.swift in Sources */,
 				31BC78AD2886F9E700005BFE /* SchoolsDataManager.swift in Sources */,
 				31BC789A2885BCFD00005BFE /* LoadingViewController.swift in Sources */,
 				315D2A8C2890518600644448 /* SettingsViewController.swift in Sources */,
@@ -401,6 +408,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FDM4D7L667;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -425,6 +433,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FDM4D7L667;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -477,6 +486,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -491,7 +501,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -537,6 +547,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -545,7 +556,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -564,6 +575,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NYCSchools3/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NYCSchools;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -590,6 +603,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NYCSchools3/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NYCSchools;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

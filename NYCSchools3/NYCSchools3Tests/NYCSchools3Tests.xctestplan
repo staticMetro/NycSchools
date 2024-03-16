@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "47DEE159-3A06-4FE0-A5CA-530A53BAFAEA",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:NYCSchools3.xcodeproj",
+        "identifier" : "315D2A7F288EFF2D00644448",
+        "name" : "NYCSchools3Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
