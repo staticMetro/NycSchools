@@ -154,9 +154,9 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         var view2: MKMarkerAnnotationView
         if annotation is MKUserLocation {
-            let pin = mapView.view(for: annotation) as? MKPinAnnotationView ??
-            MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
-            pin.pinTintColor = UIColor.red
+            let pin = mapView.view(for: annotation) as? MKMarkerAnnotationView ??
+            MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            pin.tintColor = UIColor.red
             pin.canShowCallout = true
             pin.calloutOffset = CGPoint(x: -5, y: 5)
             pin.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
